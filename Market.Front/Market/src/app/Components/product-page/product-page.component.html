@@ -1,0 +1,72 @@
+
+<div class="wrapper">
+    <div class="headerBox">
+        <ngb-rating  [(rate)]="currentRate" ></ngb-rating>
+        <span  style="margin-left: 10px;">{{Product.name}}</span>
+
+    </div>
+    <div class="box1">
+        <span  >{{Product.name}}</span>
+
+    </div>
+    <div class="box2">
+        
+        <ngb-carousel *ngIf="images" style="width: 370px;">
+            <ng-template ngbSlide >
+                <div class="picsum-img-wrapper">
+                    <img [src]="images[0]" style="height:330px;width: max-content;" alt="Random first slide" />
+                </div>
+                
+            </ng-template>
+            
+        </ngb-carousel>
+
+    </div>
+    <div class="box3">Three</div>
+    <div class="box5">
+        <p class="price" >{{Product.price}} ₽</p>
+        
+            
+        
+        <button mat-raised-button style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " >в ихбранное</button>
+    </div>
+    <div class="box4"><div >
+        
+        
+        <mat-tab-group class="Product"  mat-stretch-tabs="true" mat-align-tabs="start">
+           
+                <mat-tab label="Характеристики"   > 
+                
+                    <div  *ngFor="let type of Product.typesCharacteristics" >
+                        <div  >
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">{{type.name}}</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody >
+                                    <tr *ngFor="let characteristic of type.charastitics">
+                                        <td ><Span>{{characteristic.name}}</Span></td>
+                                        <td ><Span>{{characteristic.text}}</Span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </mat-tab>
+           
+            <mat-tab label="Second"> 
+            </mat-tab>
+            <mat-tab label="Third"> Content 3 </mat-tab>
+          </mat-tab-group>
+    </div>
+</div>
+</div>
+
+
+
+
+

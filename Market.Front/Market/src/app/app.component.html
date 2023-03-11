@@ -1,0 +1,67 @@
+ 
+
+
+
+	<ng-template #content let-offcanvas>
+		<div class="offcanvas-header">
+			<h4 class="offcanvas-title">категории</h4>
+			<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+		</div>
+		<div class="offcanvas-body">
+				<!-- NEW -->
+	<div class="menu">
+		<div class="container menu__container">
+			<div class="catalog">
+				<div class="catalog__wrapper">
+					 
+            	<i class="fa fa-bars catalog__header-icon"></i></div>
+					<ul class="catalog__list">
+						<li class="catalog__item" *ngFor = "let category of Categories">
+
+							<a href="/" class="catalog__link">
+								{{category.categoryName}}
+							</a>
+
+							<div class="catalog__subcatalog">
+								<a href="/Products/{{subCategory.subCategoryName}}" 
+									class="catalog__subcatalog-link" 
+									(click) = "ShowProducts(subCategory.subCategoryName)" 
+									*ngFor = "let subCategory of category.subCategories">{{subCategory.subCategoryName}}
+								</a>
+								
+							</div>							
+						</li>
+						 
+							 
+						 					
+					</ul>
+				 
+			</div>	
+			
+			 
+		</div>
+	</div>
+		</div>
+	</ng-template>
+	
+	<p>
+		<mat-toolbar color="primary">
+		  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+			<button mat-icon-button class="example-icon" class="btn btn-lg btn-outline-primary mb-2 me-2" aria-label="Example icon-button with menu icon" (click)="openScroll(content)">
+				<mat-icon>menu</mat-icon>
+			  </button>
+
+ 
+		  </button>
+		  <span>My App</span>
+		  <span class="example-spacer"></span>
+ 
+ 
+		</mat-toolbar>
+	  </p>
+
+	<div class="content">
+		<router-outlet></router-outlet>
+	</div>	
+	
+	
