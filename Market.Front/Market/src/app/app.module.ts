@@ -16,10 +16,14 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { ShoppingCartComponent } from './Components/shopping-cart/shopping-cart.component';
+import { LocalStorageService } from './Services/LocalStorageService';
+import { ProductsHelper } from './Helpers/ProductsHelper';
+ 
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
   {path: 'Product/:id', component:ProductPageComponent},
-
+  {path: 'ProductsBasket',component:ShoppingCartComponent}
 ]
 
 @NgModule({
@@ -27,6 +31,7 @@ const routes: Routes = [
     AppComponent,
     ProductsListComponent,
     ProductPageComponent,
+    ShoppingCartComponent,
      
   ],
   imports: [
@@ -39,11 +44,14 @@ const routes: Routes = [
     MatTabsModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    
   ],
   providers: [
     HttpClientHelper,
-    BaseService
+    BaseService,
+    LocalStorageService,
+    ProductsHelper
   ],
   bootstrap: [AppComponent]
 })

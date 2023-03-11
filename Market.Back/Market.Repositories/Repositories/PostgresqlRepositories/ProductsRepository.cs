@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Market.Entities.Dto;
+using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Npgsql;
 using System;
@@ -31,6 +32,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
             string sql = @"select " +
                 $"{TableName}.{nameof(ProductDto.Name)}," +
+                $"{TableName}.{nameof(ProductDto.Id)}," +
                 $"{TableName}.{nameof(ProductDto.Description)}," +
                 $"{TableName}.{nameof(ProductDto.Quantity)}," +
                 $"{TableName}.{nameof(ProductDto.Brend)}," +
@@ -60,7 +62,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 Quantity = first.quantity,
             };
 
-            
+
             foreach (var t in list)
             {
                 var type = product.TypesCharacteristics.FirstOrDefault(p => p.Name == t.typeСharacteristicname);
@@ -72,7 +74,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         Text = t.Сharacteristic
                     });
                 }
-                else {
+                else
+                {
                     var newType = new ProductCharacteristicType()
                     {
                         Name = t.typeСharacteristicname,
@@ -154,6 +157,16 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                     Text = t.Text
                 });
             }
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetProducts(GetProductsRequest request)
+        {
+            List<ProductDto> products = new List<ProductDto>();
+            foreach (var t in request.Id)
+            {
+                products.Add(await GetProductById(t));
+            }
+            return products;
         }
     }
 }

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbRatingConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from 'src/app/Entities/Product';
+import { ProductsHelper } from 'src/app/Helpers/ProductsHelper';
 import { BaseService } from 'src/app/Services/BaseService';
+import { LocalStorageService } from 'src/app/Services/LocalStorageService';
 
 @Component({
   selector: 'app-product-page',
@@ -11,10 +13,12 @@ import { BaseService } from 'src/app/Services/BaseService';
 })
 export class ProductPageComponent implements OnInit {
   public Product:Product = new Product();
-  //images  = [944, 1011, 984].map((n) => `https://picsum.photos/id/${n}/900/500`);
+   
   images:string[] = [];
   currentRate:number = 2;
-  constructor(private _router: ActivatedRoute,private _service: BaseService,config: NgbRatingConfig) { 
+  keyLocalStorage:string = "products"; // ключ по которому нужно получать сериализованную коллекцию с товарами, которая будет использоваться в корзине
+
+  constructor(private _router: ActivatedRoute,private _service: BaseService,config: NgbRatingConfig, private helper:ProductsHelper) { 
 
     config.max = 5;
   }
@@ -25,8 +29,15 @@ export class ProductPageComponent implements OnInit {
     let s = Number(this._router.snapshot.paramMap.get("id"));
     
     this.Product = await this._service.GetProductById(s);
+    this.Product.id = s;
+    console.log(this.Product.id)
     this.images.push(this.Product.image)
     console.log(this.Product);
   }
 
+  /// добавление товара в корзину
+  public AddToCart(){
+
+    this.helper.AddProduct(this.Product.id);
+  }
 }

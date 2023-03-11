@@ -1,4 +1,5 @@
 ﻿using Market.Entities.Dto;
+using Market.Entities.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,5 +37,6 @@ namespace Market.Repositories.Interfaces
         /// <returns></returns>
         public Task<ProductDto>GetProductById(long id);
 
+        public Task<IEnumerable<ProductDto>> GetProducts(GetProductsRequest request);
     }
 }

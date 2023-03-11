@@ -1,4 +1,5 @@
 ﻿using Market.Entities.Dto;
+using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,26 @@ namespace Market.Controllers
             _logger = logger;
             _manager = manager;
             _repository = manager.ProductsRepository;
+        }
+
+        [HttpPost("GetProducts")]
+        public async Task<IActionResult> GetProducts([FromBody] List<long> longs)
+        {
+
+            try
+            {
+                longs = longs.Distinct().ToList();
+                var products = await _repository.GetProducts(new GetProductsRequest()
+                {
+                    Id = longs
+                });
+                return Ok(products);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("GetProductsByCategory/{category}")]
@@ -45,7 +66,6 @@ namespace Market.Controllers
             {
                 _logger.Error($"Ошибка при добавлении нового товара {ex.Message}");
                 return StatusCode(500, ex.Message);
-
             }
         }
 
@@ -59,10 +79,8 @@ namespace Market.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, ex.Message);
             }
-
         }
     }
 }

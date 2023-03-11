@@ -26,5 +26,10 @@ export class BaseService{
         return await this._dataLoader.GetProductById(id);
 
     }
+    public async GetProductsById(id:number[]):Promise<Product[]>{
+        return await this._dataLoader.GetGroductsById(id);
+
+    }
+
 
 }

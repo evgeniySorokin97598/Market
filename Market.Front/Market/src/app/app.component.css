@@ -267,8 +267,11 @@ a:hover {
 
 .content{
     margin-top: 0px;
-    position: absolute;
+     
     width: 90%;
-    margin-left: 5%;
+    align-content: center;
     height: 100%;
+
+
+    margin-left: 5%;
 }

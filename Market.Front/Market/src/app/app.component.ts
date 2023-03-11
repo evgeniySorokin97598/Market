@@ -26,6 +26,11 @@ export class AppComponent {
   ShowProducts(subcategory:string) {
     this.router.navigate(['/Products/' + subcategory]);
   }
+
+  ShowProductsBasket(){
+    this.router.navigate(['/ProductsBasket/']);
+  }
+
   openScroll(content: TemplateRef<any>) {
 		this.offcanvasService.open(content, { scroll: true });
 	}
