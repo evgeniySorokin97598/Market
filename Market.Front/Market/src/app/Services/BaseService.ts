@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Category } from "../Entities/Category";
+import { Category, SubCategory } from "../Entities/Category";
 import { Product } from "../Entities/Product";
 import { HttpClientHelper } from "../Helpers/HttpClientHelper";
 import { DataLoader } from "../Loaders/DataLoader";
@@ -29,6 +29,9 @@ export class BaseService{
     public async GetProductsById(id:number[]):Promise<Product[]>{
         return await this._dataLoader.GetGroductsById(id);
 
+    }
+    public async GetSubcatories(category:string):Promise<SubCategory[]>{
+        return await this._dataLoader.GetSubcatories(category);
     }
 
 

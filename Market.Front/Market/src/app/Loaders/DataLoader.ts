@@ -1,4 +1,4 @@
-import { Category } from "../Entities/Category";
+import { Category, SubCategory } from "../Entities/Category";
 import { Product } from "../Entities/Product";
 import { HttpClientHelper } from "../Helpers/HttpClientHelper";
 
@@ -29,5 +29,9 @@ export class DataLoader{
         
         console.log(id);
         return await this._helper.PostRequest(url,id)
+    }
+    public async GetSubcatories(category:string):Promise<SubCategory[]>{
+        let url:string = this._apiUrl+ 'Categories/GetSubCategories/'+category;
+        return await this._helper.GetRequest(url)
     }
 }

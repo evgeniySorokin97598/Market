@@ -1,0 +1,33 @@
+
+   <div *ngIf = "hideComponent"  >
+    <div   *ngFor = "let subcategory of Category.subCategories"   >
+        
+      <div class="card"  >
+        <div  >
+          <div (click) = "ShowProducts(subcategory.subCategoryName)">
+            
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/4.webp" 
+              class="card-img-top" alt="Laptop" />
+              <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <p class="small"><a href="#!" class="text-muted"  >{{subcategory.subCategoryName}}</a></p>
+                
+              </div>
+              
+              
+  
+               
+            </div>
+          </div>
+        </div>
+
+      </div>
+    
+    </div>
+</div>
+
+
+ 
+ 
+
+ 

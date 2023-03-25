@@ -36,9 +36,18 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             return result;
         }
 
+        public async Task<IEnumerable<SubCategory>> GetSubCategories(string category)
+        {
+            var result = (await GetCategoriesAsync(category))?.FirstOrDefault()?.SubCategories;
+            if (result == null) { 
+            return new List<SubCategory>();
+            }
+            return result;
+
+        }
 
 
-        public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync()
+        public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync(string category = "")
         {
             string sql = $"select  " +
                 $" subcategory.name as {nameof(SubCategory.SubCategoryName)}, " +
@@ -47,10 +56,19 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 $" categories.name as {nameof(CategoryDto.CategoryName)} " +
                 $"from {SubcategoryRepository.TableName}  " +
                 $"join {_tableName} on {SubcategoryRepository.TableName}.{SubcategoryRepository.CategoryIdColumnName} = {_tableName}.{IdColumn} ";
-            var responce = (await _connection.QueryAsync(sql));
-             
-
-
+            if (!string.IsNullOrEmpty(category))
+            {
+                sql += $" WHERE {_tableName}.name = @category ";
+            }
+            IEnumerable<dynamic> responce = null;
+            if (string.IsNullOrEmpty(category))
+            {
+                responce = (await _connection.QueryAsync(sql));
+            }
+            else
+            {
+                responce = (await _connection.QueryAsync(sql, new { category }));
+            }
             var result = new List<CategoryDto>();
             foreach (var t in responce)
             {

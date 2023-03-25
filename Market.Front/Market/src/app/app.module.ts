@@ -19,11 +19,14 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { ShoppingCartComponent } from './Components/shopping-cart/shopping-cart.component';
 import { LocalStorageService } from './Services/LocalStorageService';
 import { ProductsHelper } from './Helpers/ProductsHelper';
- 
+import { CategoryListComponent } from './Components/category-list/category-list.component';
+import { FormsModule } from '@angular/forms';
+import {MatTableModule} from '@angular/material/table';
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
   {path: 'Product/:id', component:ProductPageComponent},
-  {path: 'ProductsBasket',component:ShoppingCartComponent}
+  {path: 'ProductsBasket',component:ShoppingCartComponent},
+  {path: 'Subcategories/:categoryName',component:CategoryListComponent}
 ]
 
 @NgModule({
@@ -32,6 +35,8 @@ const routes: Routes = [
     ProductsListComponent,
     ProductPageComponent,
     ShoppingCartComponent,
+    CategoryListComponent,
+     
      
   ],
   imports: [
@@ -45,7 +50,8 @@ const routes: Routes = [
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-    
+    FormsModule,
+    MatTableModule
   ],
   providers: [
     HttpClientHelper,

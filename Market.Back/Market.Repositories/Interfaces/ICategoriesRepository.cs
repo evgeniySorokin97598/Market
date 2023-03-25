@@ -10,9 +10,9 @@ namespace Market.Repositories.Interfaces
 {
     public interface ICategoriesRepository
     {
-        public Task<IEnumerable<CategoryDto>> GetCategoriesAsync();
+        public Task<IEnumerable<CategoryDto>> GetCategoriesAsync(string category = "");
         public Task<long> AddCategoryAsync(CategoryDto category);
-         
+        public Task<IEnumerable<SubCategory>> GetSubCategories(string category);
 
     }
 }

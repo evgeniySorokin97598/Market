@@ -50,10 +50,11 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             {
                 Id
             }));
-
+            
             var first = list.FirstOrDefault();
             ProductDto product = new ProductDto()
             {
+                Id = first.id,
                 Brend = first.brend,
                 Name = first.name,
                 Description = first.description,
@@ -164,7 +165,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             List<ProductDto> products = new List<ProductDto>();
             foreach (var t in request.Id)
             {
-                products.Add(await GetProductById(t));
+                if (t != 0) products.Add(await GetProductById(t));
             }
             return products;
         }
