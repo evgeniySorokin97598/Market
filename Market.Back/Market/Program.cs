@@ -17,8 +17,10 @@ namespace Market
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddTransient<IDataBaseManager, DataBaseManager>();
             builder.Services.AddSingleton<LoggerLib.Interfaces.ILogger, ConsoleLogger>();
+
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.WithOrigins("*")

@@ -35,7 +35,7 @@ namespace Market.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500);
             }
         }
 
@@ -50,7 +50,7 @@ namespace Market.Controllers
             catch (Exception ex)
             {
                 _logger.Error($"Ошибка при получении товаров по категории {category}");
-                return StatusCode(500, ex.Message);
+                return StatusCode(500);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Market.Controllers
             catch (Exception ex)
             {
                 _logger.Error($"Ошибка при добавлении нового товара {ex.Message}");
-                return StatusCode(500, ex.Message);
+                return StatusCode(500);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Market.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500);
             }
         }
     }

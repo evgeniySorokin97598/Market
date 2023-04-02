@@ -21,7 +21,7 @@ namespace Market.Repositories.Interfaces
         /// </summary>
         /// <param name="product"></param>
         /// <returns>возвращает id добавленного товара</returns>
-        public Task<long> AddAsync(ProductDto product);
+        public Task<int> AddAsync(ProductDto product);
 
         /// <summary>
         /// добавление характеристик к товару

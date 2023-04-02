@@ -5,16 +5,13 @@
         <span  style="margin-left: 10px;">{{Product.name}}</span>
 
     </div>
-    <div class="box1">
-        <span  >{{Product.name}}</span>
-
-    </div>
+     
     <div class="box2">
         
-        <ngb-carousel *ngIf="images" style="width: 370px;">
+        <ngb-carousel *ngIf="images" >
             <ng-template ngbSlide >
-                <div class="picsum-img-wrapper">
-                    <img [src]="images[0]" style="height:330px;width: max-content;" alt="Random first slide" />
+                <div  >
+                    <img [src]="images[0]" style="height:330px; width: 100%" alt="Random first slide" />
                 </div>
                 
             </ng-template>
@@ -22,17 +19,21 @@
         </ngb-carousel>
 
     </div>
-    <div class="box3">Three</div>
+    <div class="box3">
+        <span style="width: 30px;">Появилсь вопросы?</span>
+    </div>
+
     <div class="box5">
         <p class="price" >{{Product.price}} ₽</p>
-        
-            
-        
-        <button mat-raised-button style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " >в ихбранное</button>
-          <button mat-fab color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " (click)="AddToCart()" >
-			<mat-icon>add_shopping_cart</mat-icon>
-		  </button>
+         
+        <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; ">
+            в избранное  <mat-icon>bookmark</mat-icon>
+        </button>
+          <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " (click) = "AddToCart()">
+            Добавить в корзину <mat-icon>add_shopping_cart</mat-icon>
+        </button>
     </div>
+    
     <div class="box4"><div >
         
         

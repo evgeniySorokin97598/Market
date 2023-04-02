@@ -94,7 +94,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             return product;
         }
 
-        public async Task<long> AddAsync(ProductDto product)
+        public async Task<int> AddAsync(ProductDto product)
         {
             string insert = $"INSERT INTO {TableName} (" +
                 $"{nameof(product.Name)}," +
@@ -111,8 +111,9 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 $" @{nameof(product.Image)}," +
                 $" @{nameof(product.Quantity)}," +
                 $" @{nameof(product.Brend)}," +
-                $" @{nameof(product.SubCategoryid)}) returning id";
-            long id = (await _connection.QueryAsync<int>(insert, product)).FirstOrDefault();
+                $" @{nameof(product.SubCategoryid)}" +
+                $") returning id";
+            int id = (await _connection.QueryAsync<int>(insert, product)).FirstOrDefault();
             return id;
         }
 
@@ -138,7 +139,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public async Task AddCharectiristic(ProductCharacteristicType characteristic)
         {
 
-            /// добавление нового типа характеристики. Возможно лучше сделать через транзацию и с проверкой на дубли
+             
             string insetTypeChararistic = $"INSERT INTO typeСharacteristics (Name,ProductId) VALUES(@Name,@ProductId) returning id";
             string insetChararistic = $" INSERT INTO Сharacteristics (Сharacteristicname,TypeСharacteristicsId,Сharacteristic) VALUES(@Сharacteristic,@TypeId,@Text)";
 

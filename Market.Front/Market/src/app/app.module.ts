@@ -16,12 +16,19 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { ShoppingCartComponent } from './Components/shopping-cart/shopping-cart.component';
+import { FiveDayRangeSelectionStrategy, ShoppingCartComponent } from './Components/shopping-cart/shopping-cart.component';
 import { LocalStorageService } from './Services/LocalStorageService';
 import { ProductsHelper } from './Helpers/ProductsHelper';
 import { CategoryListComponent } from './Components/category-list/category-list.component';
 import { FormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatDatepickerModule, MAT_DATE_RANGE_SELECTION_STRATEGY} from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
   {path: 'Product/:id', component:ProductPageComponent},
@@ -40,6 +47,9 @@ const routes: Routes = [
      
   ],
   imports: [
+     
+        
+    MatInputModule,     
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -51,9 +61,29 @@ const routes: Routes = [
     MatIconModule,
     MatToolbarModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatBadgeModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    BrowserModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+     
+    MatFormFieldModule,
+    BrowserAnimationsModule,
+    FormsModule,
+     
+    
+    
+    MatNativeDateModule,
+    MatIconModule,
+    MatFormFieldModule,
+    BrowserAnimationsModule
   ],
   providers: [
+     
+    FiveDayRangeSelectionStrategy,
     HttpClientHelper,
     BaseService,
     LocalStorageService,

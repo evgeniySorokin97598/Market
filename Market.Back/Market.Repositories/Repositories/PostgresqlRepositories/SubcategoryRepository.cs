@@ -25,20 +25,28 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         {
             _connection = connection;
         }
-        public async Task<long> AddAsync(SubCategory category)
+        public async Task<int> AddAsync(SubCategory category)
         {
-            string sql = $"INSERT INTO {TableName} " +
-                $"({NameColumnName},{UrlIconcColumnName},{CategoryIdColumnName}) " +
-                $"VALUES (@Name,@UrlIcon,@CategoryId) " +
-                $"returning {IdColumnName}";
 
-            var result = (await _connection.QueryAsync<long>(sql, new
+            string checkSql = $"SELECT {IdColumnName} FROM {TableName} WHERE {NameColumnName} = @name";
+            var check = await _connection.QueryAsync<int>(checkSql, new { name = category.SubCategoryName });
+            if (!check.Any())
             {
-                Name = category.SubCategoryName,
-                UrlIcon = category.SubCategoryUrlIcon,
-                CategoryId = category.CategoryId
-            })).FirstOrDefault();
-            return result;
+                string sql = $"INSERT INTO {TableName} " +
+                    $"({NameColumnName},{UrlIconcColumnName},{CategoryIdColumnName}) " +
+                    $"VALUES (@Name,@UrlIcon,@CategoryId) " +
+                    $"returning {IdColumnName}";
+
+                var result = (await _connection.QueryAsync<int>(sql, new
+                {
+                    Name = category.SubCategoryName,
+                    UrlIcon = category.SubCategoryUrlIcon,
+                    CategoryId = category.CategoryId
+                })).FirstOrDefault();
+                return result;
+            }
+            else return check.FirstOrDefault();
+            
         }
     }
 }

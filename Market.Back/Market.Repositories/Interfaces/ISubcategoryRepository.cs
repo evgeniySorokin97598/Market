@@ -9,6 +9,6 @@ namespace Market.Repositories.Interfaces
 {
     public interface ISubcategoryRepository
     {
-        public Task<long> AddAsync(SubCategory category);
+        public Task<int> AddAsync(SubCategory category);
     }
 }

@@ -1,3 +1,7 @@
+
+.body{
+    background-color: black;
+}
 .table{
     width: 80%;
     box-shadow: none;
@@ -18,5 +22,7 @@
   }
 .content{
     margin-left: 30px;
+    margin-right: 30px;
+   
 }
  

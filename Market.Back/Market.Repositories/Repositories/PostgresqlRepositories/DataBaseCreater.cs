@@ -21,7 +21,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         {
 
             _commandsCreate = new List<string>();
-            string connectionstring = "Host=192.168.133.128;Port=5432;Username=postgres;Password=123qwe45asd";
+             
 
             Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
 
@@ -63,13 +63,14 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     Name text,
     ProductId bigint REFERENCES Products (СharacteristicId) NOT NULL  
 );");
+
             //// характеристики  свойственные для конкретного типа товара
             ///например  для телефона есть тип характеристики "Сотовая связь" и в этой таблице будет содержаться 
             ///то что к ней относится: "Количество физических SIM-карт", "Стандарт связи" и тд
             _commandsCreate.Add(@"CREATE  TABLE IF NOT EXISTS  Сharacteristics
 (
     Id SERIAL PRIMARY KEY,
-    СharacteristicName text,
+    СharacteristicName text ,
     Сharacteristic text,
     TypeСharacteristicsId bigint REFERENCES TypeСharacteristics (Id) NOT NULL
 );");

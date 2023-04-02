@@ -25,8 +25,6 @@ export class DataLoader{
 
     public async GetGroductsById(id:number[]) :Promise<Product[]>{
         let url:string = this._apiUrl+ 'Products/GetProducts';
- 
-        
         console.log(id);
         return await this._helper.PostRequest(url,id)
     }

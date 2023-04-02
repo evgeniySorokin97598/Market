@@ -1,45 +1,79 @@
-<div class="basket">
- 
- 
-    <div class="basket-product">
-      <div class="item">
-        <div class="product-image">
-          <img src="http://placehold.it/120x166" alt="Placholder Image 2" class="product-frame">
-        </div>
-        <div class="product-details">
-          <h1><strong><span class="item-quantity">4</span> x Eliza J</strong> Lace Sleeve Cuff Dress</h1>
-          <p><strong>Navy, Size 18</strong></p>
-          <p>Product Code - 232321939</p>
-        </div>
-      </div>
-      <div class="price">26.00</div>
-      <div class="quantity">
-        <input type="number" value="4" min="1" class="quantity-field">
-      </div>
-      <div class="subtotal">104.00</div>
-      <div class="remove">
-        <button>Remove</button>
-      </div>
-    </div>
-    <div class="basket-product">
-      <div class="item">
-        <div class="product-image">
-          <img src="http://placehold.it/120x166" alt="Placholder Image 2" class="product-frame">
-        </div>
-        <div class="product-details">
-          <h1><strong><span class="item-quantity">1</span> x Whistles</strong> Amella Lace Midi Dress</h1>
-          <p><strong>Navy, Size 10</strong></p>
-          <p>Product Code - 232321939</p>
-        </div>
-      </div>
-      <div class="price">26.00</div>
-      <div class="quantity">
-        <input type="number" value="1" min="1" class="quantity-field">
-      </div>
-      <div class="subtotal">26.00</div>
-      <div class="remove">
-        <button>Remove</button>
-      </div>
-    </div>
-  </div>
+
    
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"  mat-stretch-tabs="true" mat-align-tabs="start"   >
+
+    <mat-tab label="каталог товаров"  >
+
+       
+      <mat-table [dataSource]="dataSource" class="table"  >
+        
+        
+         
+        
+          <ng-container matColumnDef="name"  >
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element" (click) = "OpenProduct(element.id)" style=" cursor: pointer;"> 
+            <div class="product-image">
+              <div >{{element.name}}</div>
+            </div>
+            
+          </mat-cell>
+        </ng-container>
+      
+        <ng-container matColumnDef="price">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> price </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let element" (click) = "OpenProduct(element.id)" style=" cursor: pointer;"> 
+            <div  >
+              <div >{{element.price}}</div>
+            </div>
+            
+          </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="remove">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> remove </mat-header-cell>
+          
+          <mat-cell mat-cell *matCellDef="let element"  > 
+              <button mat-raised-button color="basic" (click) = "RemoveItem(element)"   >
+                удалить  
+                </button>
+          </mat-cell>
+
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> quantity </mat-header-cell>
+          
+          <mat-cell mat-cell *matCellDef="let element"> 
+            <mat-form-field appearance="fill" style="margin-top: 10px;">
+              <mat-label>кол-во</mat-label>
+              <input  type="number"  min="1" value="1"  matInput>
+            </mat-form-field>
+          </mat-cell>
+
+        </ng-container>
+     
+        <mat-header-row  *matHeaderRowDef="displayedColumns"  ></mat-header-row>
+        <mat-row   class="rowTable"   matRipple *matRowDef="let row; columns: displayedColumns; "    ></mat-row>
+      
+      </mat-table>
+
+     
+    
+  </mat-tab>
+    <mat-tab label="Second">
+      
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker">
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker">
+          </mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    
+     
+     
+    </mat-tab>
+     
+  </mat-tab-group>

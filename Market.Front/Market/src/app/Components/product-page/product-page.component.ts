@@ -11,12 +11,13 @@ import { LocalStorageService } from 'src/app/Services/LocalStorageService';
   templateUrl: './product-page.component.html',
   styleUrls: ['./product-page.component.css']
 })
+
 export class ProductPageComponent implements OnInit {
   public Product:Product = new Product();
    
   images:string[] = [];
   currentRate:number = 2;
-  keyLocalStorage:string = "products"; // ключ по которому нужно получать сериализованную коллекцию с товарами, которая будет использоваться в корзине
+   
 
   constructor(private _router: ActivatedRoute,private _service: BaseService,config: NgbRatingConfig, private helper:ProductsHelper) { 
 

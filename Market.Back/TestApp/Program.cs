@@ -14,22 +14,26 @@ namespace TestApp
             creater.Create();
             manager = new DataBaseManager();
             //CreateCategories();
-            manager.ProductsRepository.GetProductById(3);
 
-
-
-
-
-
+            try
+            {
+                CreateCategories().GetAwaiter().GetResult();
+            }
+            catch (Exception ex) {
+                Console.WriteLine("error " + ex.Message);
+            
+            }
         }
-        private static void AddCharectiristic() {
+
+
+        private static void AddCharectiristic(int productId) {
             manager.ProductsRepository.AddCharectiristic(new ProductCharacteristicType()
             {
-                ProductId = 3,
+                ProductId = productId,
                 Name = "Экран ноутбука",
                 Charastitics = new List<Charastitic> {
                     new Charastitic(){
-                       Name = "Бренд",
+                      Name = "Бренд",
                       Text = "DIGMA"
                     },
                     new Charastitic(){
@@ -55,14 +59,14 @@ namespace TestApp
                     SubCategoryid = 3,
                     Description = $"Description{i}",
                     Image = "https://www.citilink.ru/product/kabel-buro-usb-tc-1-2b2a-usb-a-m-usb-type-c-m-1-2m-chernyi-1478082/",
-                    Name = $"дорошой комп{i}",
+                    Name = $"дорогой комп{i}",
                     Price = new Random().Next(100000, 200000),
                     Quantity = new Random().Next(1, 100),
                 }).GetAwaiter().GetResult(); ;
             }
 
         }
-        private static async void CreateCategories()
+        private static async Task CreateCategories()
         {
             List<string> sucategirs = new List<string>();
             sucategirs.Add("Недорогие");
@@ -73,12 +77,12 @@ namespace TestApp
             sucategirs.Add("Полный шлак");
 
             Dictionary<string, List<string>> categories = new Dictionary<string, List<string>>();
-
             categories.Add("Компы", sucategirs);
-            CreateCategories(categories);
+
+           await CreateCategories(categories);
 
         }
-        private static async void CreateCategories(Dictionary<string, List<string>> categories)
+        private static async Task CreateCategories(Dictionary<string, List<string>> categories)
         {
             foreach (var t in categories)
             {
@@ -86,7 +90,7 @@ namespace TestApp
                 {
                     CategoryName = t.Key,
                     Description = "Description",
-                    CategoryIconUrl = "https://imdiz.ru/files/store/img/icons_catalog/desktops.png"
+                    CategoryIconUrl = "https://cdn.citilink.ru/magjqha5wz4kARnf2OGpTvOoT6StVnkREEVlbQOxEHM/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1478082_v01_b.jpg"
                 });
                 foreach (var subcategory in t.Value)
                 {
@@ -96,6 +100,24 @@ namespace TestApp
                         SubCategoryName = subcategory,
                         SubCategoryUrlIcon = "https://imdiz.ru/files/store/img/icons_catalog/desktops.png"
                     });
+
+
+                    for (int i = 0; i < 40; i++)
+                    {
+
+                       var id =  manager.ProductsRepository.AddAsync(new Market.Entities.Dto.ProductDto()
+                        {
+                            Brend = $"Brend{i}",
+                            SubCategoryid = SubcategoryId,
+                            Description = $"Description{i}",
+                            Image = "https://cdn.citilink.ru/magjqha5wz4kARnf2OGpTvOoT6StVnkREEVlbQOxEHM/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1478082_v01_b.jpg",
+                            Name = $"дорогой комп{i}",
+                            Price = new Random().Next(100000, 200000),
+                            Quantity = new Random().Next(1, 100),
+                        }).GetAwaiter().GetResult(); ;
+                        AddCharectiristic(id);
+                    }
+                   
                 }
 
             }

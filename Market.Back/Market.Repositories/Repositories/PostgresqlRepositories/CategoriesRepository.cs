@@ -27,20 +27,31 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public async Task<long> AddCategoryAsync(CategoryDto category)
         {
-            string sql = $"INSERT INTO {_tableName} ({ColumnName},{UrlIconColumnName}) VALUES (@Name,@UrlIcon) returning {IdColumn}";
-            var result = (await _connection.QueryAsync<long>(sql, new
+            string checkSql = $"SELECT {IdColumn} FROM {_tableName} where {ColumnName} = @name ";
+
+            var checkId = (await _connection.QueryAsync<int>(checkSql, new { name = category.CategoryName }));
+            if (!checkId.Any())
             {
-                Name = category.CategoryName,
-                UrlIcon = category.CategoryIconUrl,
-            })).FirstOrDefault();
-            return result;
+                /// если ранее небыло такой категории
+                string sql = $"INSERT INTO {_tableName} ({ColumnName},{UrlIconColumnName}) VALUES (@Name,@UrlIcon) returning {IdColumn}";
+                var result = (await _connection.QueryAsync<long>(sql, new
+                {
+                    Name = category.CategoryName,
+                    UrlIcon = category.CategoryIconUrl,
+                })).FirstOrDefault();
+                return result;
+            }
+            else return checkId.FirstOrDefault();
+
+            
         }
 
         public async Task<IEnumerable<SubCategory>> GetSubCategories(string category)
         {
             var result = (await GetCategoriesAsync(category))?.FirstOrDefault()?.SubCategories;
-            if (result == null) { 
-            return new List<SubCategory>();
+            if (result == null)
+            {
+                return new List<SubCategory>();
             }
             return result;
 

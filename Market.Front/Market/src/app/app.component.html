@@ -1,8 +1,8 @@
  
+<div >
 
 
-
-	<ng-template #content let-offcanvas>
+	<ng-template #content let-offcanvas >
  
 		<div class="offcanvas-body  "   >
 				<!-- NEW -->
@@ -16,7 +16,7 @@
 					    <div >
 						  <ng-container matColumnDef="position"  >
 							<th mat-header-cell *matHeaderCellDef class="category">категории </th>
-							<td mat-cell *matCellDef="let element"   (click) = "ShowCategory(element.categoryName)"   class="category"   > {{element.categoryName}}  </td>
+							<td mat-cell *matCellDef="let element"   (click) = "ShowCategory(element.categoryName)"  class="category"   > {{element.categoryName}}  </td>
 						  </ng-container>
 						</div> 	
 				    
@@ -30,7 +30,7 @@
 	</ng-template>
 	
 	<p>
-		<mat-toolbar color="primary">
+		<mat-toolbar color="primary" style="height: 80px;">
 		  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
 			<button mat-icon-button class="example-icon" class="btn btn-lg btn-outline-primary mb-2 me-2" aria-label="Example icon-button with menu icon" (click)="openScroll(content)">
 				<mat-icon>menu</mat-icon>
@@ -38,15 +38,15 @@
 			  
 		  </button>
 		  
-		  <span>Магазин И.П. козляткина</span>
-		  <button mat-fab color="primary" style="margin-left: 80%;" (click)="ShowProductsBasket()"  >
-			<div >
-				<mat-icon  >shopping_basket</mat-icon>
-				 
-			</div>
-			
-		  </button>
-		   
+		  <span>каталог</span>
+		  
+		  <div style="right: 30px;   position: absolute;  "  >
+			<button mat-raised-button color="primary" style="  float: right;   width: 150px;  " (click)="ShowProductsBasket()"  matBadge="{{productsHelper.numbers.length}}" [matBadgeHidden]="productsHelper.numbers.length == 0" matBadgeSize="large">
+				корзина <mat-icon  >shopping_basket</mat-icon>
+			  </button>
+		  </div>
+		  
+
 		  <span class="example-spacer"></span>
 		  
 		  
@@ -58,4 +58,4 @@
 		<router-outlet ></router-outlet>
 	</div>	
 	
-	
+</div>	

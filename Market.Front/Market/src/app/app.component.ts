@@ -1,16 +1,25 @@
 import { Component, TemplateRef } from '@angular/core';
+import { MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { Console } from 'console';
+import { FiveDayRangeSelectionStrategy } from './Components/shopping-cart/shopping-cart.component';
 import { Category } from './Entities/Category';
 import { HttpClientHelper } from './Helpers/HttpClientHelper';
+import { ProductsHelper } from './Helpers/ProductsHelper';
 import { BaseService } from './Services/BaseService';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [
+    {
+        provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
+        useClass: FiveDayRangeSelectionStrategy,
+    },
+],
 })
 export class AppComponent {
   title = 'Market';
@@ -18,9 +27,12 @@ export class AppComponent {
   public category: Category = new Category();
   hiddenCategories = true;
   displayedColumns: string[] = ['position', ];
-  constructor(private _service: BaseService,private router: Router,private offcanvasService: NgbOffcanvas){
+  public hiddenCountCart = true;
+  
 
-
+  constructor(private _service: BaseService,private router: Router,private offcanvasService: NgbOffcanvas,public productsHelper:ProductsHelper,){
+    productsHelper.GetProducts(); /// что бы на фронте сразу кол-во товаров отображалось, а не после какого то заказа
+     
   }
   async ngOnInit(): Promise<void>{
     let categories =  await this._service.GetHomePageData();
