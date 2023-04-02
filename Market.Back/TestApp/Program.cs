@@ -10,19 +10,19 @@ namespace TestApp
         private static IDataBaseManager manager;
         static void Main(string[] args)
         {
-            DataBaseCreater creater = new DataBaseCreater();
-            creater.Create();
-            manager = new DataBaseManager();
-            //CreateCategories();
+            //DataBaseCreater creater = new DataBaseCreater();
+            //creater.Create();
+            //manager = new DataBaseManager();
+            ////CreateCategories();
 
-            try
-            {
-                CreateCategories().GetAwaiter().GetResult();
-            }
-            catch (Exception ex) {
-                Console.WriteLine("error " + ex.Message);
+            //try
+            //{
+            //    CreateCategories().GetAwaiter().GetResult();
+            //}
+            //catch (Exception ex) {
+            //    Console.WriteLine("error " + ex.Message);
             
-            }
+            //}
         }
 
 

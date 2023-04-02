@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LoggerLib\LoggerLib.csproj" />
     <ProjectReference Include="..\Market.Entities\Market.Entities.csproj" />
   </ItemGroup>
 

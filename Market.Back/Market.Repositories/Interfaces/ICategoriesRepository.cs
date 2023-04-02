@@ -13,6 +13,7 @@ namespace Market.Repositories.Interfaces
         public Task<IEnumerable<CategoryDto>> GetCategoriesAsync(string category = "");
         public Task<long> AddCategoryAsync(CategoryDto category);
         public Task<IEnumerable<SubCategory>> GetSubCategories(string category);
+        public Task<int> GetCount();
 
     }
 }

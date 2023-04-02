@@ -1,4 +1,6 @@
-﻿using Market.Repositories.Interfaces;
+﻿using Market.Entities.Configs;
+using Market.Entities.Dto;
+using Market.Repositories.Interfaces;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,99 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public IProductsRepository ProductsRepository { get; }
 
-        public DataBaseManager()
+        private LoggerLib.Interfaces.ILogger _logger;
+        public DataBaseManager(Configs config,LoggerLib.Interfaces.ILogger logger)
         {
-            var connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+            _logger = logger;
+
+            //var connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
             CategoriesRepository = new CategoriesRepository(connection);
             SubcategoryRepository = new SubcategoryRepository(connection);
             ProductsRepository = new ProductsRepository(connection);
         }
 
+        public async Task AddTestData()
+        {
+            if ((await CategoriesRepository.GetCount()) != 0) return;
+
+
+            List<string> sucategirs = new List<string>();
+            sucategirs.Add("Недорогие");
+            sucategirs.Add("Дорогие");
+            sucategirs.Add("Микрокомпьютеры");
+            sucategirs.Add("Игровые");
+
+
+            Dictionary<string, List<string>> categories = new Dictionary<string, List<string>>();
+            categories.Add("компьютеры", sucategirs);
+
+            await CreateCategories(categories);
+
+        }
+        private async Task CreateCategories(Dictionary<string, List<string>> categories)
+        {
+            foreach (var t in categories)
+            {
+
+                var CategoryId = await CategoriesRepository.AddCategoryAsync(new Market.Entities.Dto.CategoryDto()
+                {
+                    CategoryName = t.Key,
+                    Description = "Description",
+                    CategoryIconUrl = "https://cdn.citilink.ru/magjqha5wz4kARnf2OGpTvOoT6StVnkREEVlbQOxEHM/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1478082_v01_b.jpg"
+                });
+                foreach (var subcategory in t.Value)
+                {
+                    var SubcategoryId = await SubcategoryRepository.AddAsync(new Market.Entities.Dto.SubCategory()
+                    {
+                        CategoryId = CategoryId,
+                        SubCategoryName = subcategory,
+                        SubCategoryUrlIcon = "https://imdiz.ru/files/store/img/icons_catalog/desktops.png"
+                    });
+
+
+                    for (int i = 0; i < 40; i++)
+                    {
+
+                        var id = ProductsRepository.AddAsync(new Market.Entities.Dto.ProductDto()
+                        {
+                            Brend = $"Brend{i}",
+                            SubCategoryid = SubcategoryId,
+                            Description = $"Description{i}",
+                            Image = "https://cdn.citilink.ru/magjqha5wz4kARnf2OGpTvOoT6StVnkREEVlbQOxEHM/resizing_type:fit/gravity:sm/width:1200/height:1200/plain/items/1478082_v01_b.jpg",
+                            Name = $"дорогой комп{i}",
+                            Price = new Random().Next(100000, 200000),
+                            Quantity = new Random().Next(1, 100),
+                        }).GetAwaiter().GetResult(); ;
+                        await AddCharectiristic(id);
+                    }
+
+                }
+
+            }
+        }
+        private async Task AddCharectiristic(int productId)
+        {
+            await ProductsRepository.AddCharectiristic(new ProductCharacteristicType()
+            {
+                ProductId = productId,
+                Name = "Экран ноутбука",
+                Charastitics = new List<Charastitic> {
+                    new Charastitic(){
+                      Name = "Бренд",
+                      Text = "DIGMA"
+                    },
+                    new Charastitic(){
+                       Name = "Модель",
+                      Text = "15 P417"
+                    },
+                    new Charastitic(){
+                       Name = "Диагональ экрана в дюймах",
+                      Text = "15.6"
+                    },
+               }
+            });
+        }
 
     }
 }

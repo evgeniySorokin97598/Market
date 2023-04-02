@@ -28,7 +28,6 @@ namespace Market.Controllers
             }
             catch
             {
-
                 return StatusCode(500);
             }
 

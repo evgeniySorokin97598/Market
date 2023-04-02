@@ -25,6 +25,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         }
 
 
+        public async Task<int> GetCount() {
+            string sql = $"SELECT COUNT(*) from {_tableName} ";
+
+            return (await _connection.QueryAsync<int>(sql)).First();
+
+        }
+
         public async Task<long> AddCategoryAsync(CategoryDto category)
         {
             string checkSql = $"SELECT {IdColumn} FROM {_tableName} where {ColumnName} = @name ";

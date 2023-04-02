@@ -35,10 +35,11 @@ export class AppComponent {
      
   }
   async ngOnInit(): Promise<void>{
+    await this._service.Init();
     let categories =  await this._service.GetHomePageData();
     console.log(categories);
     this.Categories = categories;
-
+    
   }
   ShowProducts(subcategory:string) {
     this.router.navigate(['/Products/' + subcategory]);

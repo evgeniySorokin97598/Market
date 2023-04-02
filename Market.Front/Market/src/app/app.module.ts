@@ -28,6 +28,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { ConfigurationService } from './Services/ConfigService';
 
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
@@ -82,7 +83,7 @@ const routes: Routes = [
     BrowserAnimationsModule
   ],
   providers: [
-     
+    ConfigurationService,
     FiveDayRangeSelectionStrategy,
     HttpClientHelper,
     BaseService,

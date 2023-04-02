@@ -1,7 +1,9 @@
 
 using LoggerLib.Loggers;
+using Market.Entities.Configs;
 using Market.Repositories.Interfaces;
 using Market.Repositories.Repositories.PostgresqlRepositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Market
 {
@@ -12,14 +14,53 @@ namespace Market
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+#if DEBUG
+            Environment.SetEnvironmentVariable("Host", "192.168.133.128");
+            Environment.SetEnvironmentVariable("Password", "123qwe45asd");
+            Environment.SetEnvironmentVariable("Port", "5432");
+            Environment.SetEnvironmentVariable("Username", "postgres");
+
+
+#endif
+
+
+
+            Configs configs = new Configs()
+            {
+                DataBaseConfig = new DataBaseConfig()
+                {
+                    Host = Environment.GetEnvironmentVariable("Host"),
+                    Password = Environment.GetEnvironmentVariable("Password"),
+                    Port = Environment.GetEnvironmentVariable("Port"),
+                    Username = Environment.GetEnvironmentVariable("Username"),
+                }
+            };
+            LoggerLib.Interfaces.ILogger logger = new ConsoleLogger();
+
+            builder.Services.AddSingleton(logger);
+
+
+            #region Создание и заполнение БД
+            DataBaseCreater creater = new DataBaseCreater(configs, logger);
+           
+            creater.Create();
+            
+
+
+            DataBaseManager manager = new DataBaseManager(configs, logger);
+            manager.AddTestData().GetAwaiter().GetResult();
+
+            #endregion
+            builder.Services.AddSingleton(configs);
             builder.Services.AddTransient<IDataBaseManager, DataBaseManager>();
-            builder.Services.AddSingleton<LoggerLib.Interfaces.ILogger, ConsoleLogger>();
+
 
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -29,14 +70,16 @@ namespace Market
             }));
             var app = builder.Build();
 
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-                 
+
             }
-            
+
             app.UseCors("MyPolicy");
             app.UseCors(x => x
                   .AllowAnyMethod()

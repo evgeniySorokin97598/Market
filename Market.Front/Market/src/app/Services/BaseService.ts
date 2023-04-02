@@ -3,15 +3,21 @@ import { Category, SubCategory } from "../Entities/Category";
 import { Product } from "../Entities/Product";
 import { HttpClientHelper } from "../Helpers/HttpClientHelper";
 import { DataLoader } from "../Loaders/DataLoader";
+import { ConfigurationService } from "./ConfigService";
 
 @Injectable()
 export class BaseService{
 
     private _dataLoader:DataLoader; /// тут должен быть интерфейс
 
-    constructor(helper:HttpClientHelper){
-        this._dataLoader = new DataLoader(helper);
+    constructor(helper:HttpClientHelper,private configurationService: ConfigurationService){
+        this._dataLoader = new DataLoader(helper,configurationService);
+        
 
+    }
+    public Init(){
+        this._dataLoader.Init();
+        
 
     }
     public async GetHomePageData(): Promise<Category[]>{

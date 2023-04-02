@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Market.Entities.Configs;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,23 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         private List<string> _commandsCreate;
         bool _dataBaseExist = false;
         public NpgsqlConnection Connection { get; private set; }
-        public DataBaseCreater()
+        private string _databaseName = "Market";
+        private LoggerLib.Interfaces.ILogger _logger;
+        public DataBaseCreater(Configs config, LoggerLib.Interfaces.ILogger logger)
         {
-
+            _logger = logger;
             _commandsCreate = new List<string>();
-             
+            Console.WriteLine($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+            Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port}; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
 
-            Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+            Connection.Open();
+            CreateDataBase().GetAwaiter().GetResult();
+            Connection.Close();
+            Connection.Dispose();
+
+            //Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
+            Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+
 
             //категории товаров
             _commandsCreate.Add(@"CREATE TABLE IF NOT EXISTS Categories
@@ -74,7 +85,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     Сharacteristic text,
     TypeСharacteristicsId bigint REFERENCES TypeСharacteristics (Id) NOT NULL
 );");
-        
+
         }
 
         /// <summary>
@@ -85,10 +96,44 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             //if (_dataBaseExist) return;
             foreach (var t in _commandsCreate)
             {
-                Console.WriteLine(t);
+
                 Connection.Execute(t);
             }
-             
+
         }
+
+        public async Task CreateDataBase()
+        {
+            try
+            {
+                Console.WriteLine($"Попытка создания БД");
+                _logger.Info("Создание базы данных");
+                string sql = @"CREATE DATABASE " + $"\"{_databaseName}\"" +
+                    @"WITH
+                OWNER = postgres
+                ENCODING = 'UTF8'
+                LC_COLLATE = 'en_US.utf8'
+                LC_CTYPE = 'en_US.utf8'
+                TABLESPACE = pg_default
+                CONNECTION LIMIT = -1
+                IS_TEMPLATE = False;";
+
+
+                Connection.Execute(sql);
+                _logger.Info("Добавление тестовых данных");
+
+                
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Ошибка при создании БД  {ex.Message}");
+            }
+
+        }
+
+
     }
+
 }
+
