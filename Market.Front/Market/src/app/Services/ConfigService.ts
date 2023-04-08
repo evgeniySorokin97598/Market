@@ -45,6 +45,7 @@ export class ConfigurationService {
         map((configuration: any) => configuration[key] || defaultValue),
       );
   }
+  
 }
 
  

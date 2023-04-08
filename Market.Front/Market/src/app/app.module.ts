@@ -30,12 +30,17 @@ import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ConfigurationService } from './Services/ConfigService';
 import {MatCardModule} from '@angular/material/card';
-
+import { RegisrationComponent } from './Components/regisration/regisration.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {  ReactiveFormsModule} from '@angular/forms';
+import { IdentetyService } from './Services/IdentetyService';
+ 
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
   {path: 'Product/:id', component:ProductPageComponent},
   {path: 'ProductsBasket',component:ShoppingCartComponent},
-  {path: 'Subcategories/:categoryName',component:CategoryListComponent}
+  {path: 'Subcategories/:categoryName',component:CategoryListComponent},
+  {path: 'Registration',component:RegisrationComponent}
 ]
 
 @NgModule({
@@ -45,11 +50,14 @@ const routes: Routes = [
     ProductPageComponent,
     ShoppingCartComponent,
     CategoryListComponent,
+    RegisrationComponent,
      
      
   ],
   imports: [
      
+    ReactiveFormsModule,
+    MatCheckboxModule,
     MatCardModule,
     MatInputModule,     
     BrowserModule,
@@ -62,22 +70,20 @@ const routes: Routes = [
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-    FormsModule,
+     
     MatTableModule,
     MatBadgeModule,
     MatDatepickerModule,
-    MatFormFieldModule,
+  
     MatSnackBarModule,
     BrowserModule,
     MatDatepickerModule,
     MatNativeDateModule,
-     
-    MatFormFieldModule,
+    BrowserModule,
+ 
     BrowserAnimationsModule,
     FormsModule,
-     
-    
-    
+
     MatNativeDateModule,
     MatIconModule,
     MatFormFieldModule,
@@ -89,7 +95,8 @@ const routes: Routes = [
     HttpClientHelper,
     BaseService,
     LocalStorageService,
-    ProductsHelper
+    ProductsHelper,
+    IdentetyService
   ],
   bootstrap: [AppComponent]
 })

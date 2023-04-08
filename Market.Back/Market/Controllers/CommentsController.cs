@@ -1,5 +1,6 @@
 ﻿using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Market.Controllers
@@ -15,7 +16,7 @@ namespace Market.Controllers
             _Logger = logger;
         }
 
-
+        [Authorize]
         [HttpPost("Add")]
         public async Task<IActionResult> AddAsync([FromBody] AddCommentRequest request)
         {

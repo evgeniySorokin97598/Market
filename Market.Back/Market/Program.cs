@@ -1,4 +1,5 @@
 
+using IdentityServer4.AccessTokenValidation;
 using LoggerLib.Loggers;
 using Market.Entities.Configs;
 using Market.Repositories.Interfaces;
@@ -58,7 +59,12 @@ namespace Market
             builder.Services.AddSingleton(configs);
             builder.Services.AddTransient<IDataBaseManager, DataBaseManager>();
 
+            builder.Services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+    .AddIdentityServerAuthentication(options =>
+    {
+        options.Authority = "https://localhost:7261";
 
+    });
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.WithOrigins("*")
@@ -76,7 +82,7 @@ namespace Market
                 app.UseSwaggerUI();
 
             }
-
+            
             app.UseCors("MyPolicy");
             app.UseCors(x => x
                   .AllowAnyMethod()
@@ -85,7 +91,7 @@ namespace Market
                                                       //.WithOrigins("https://localhost:44351")); // Allow only this origin can also have multiple origins separated with comma
                   .AllowCredentials()); // allow credentials
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

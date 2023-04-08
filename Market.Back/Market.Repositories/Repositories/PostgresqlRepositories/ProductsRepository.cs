@@ -31,27 +31,11 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public async Task<ProductDto> GetProductById(long Id)
         {
 
-            //string sql = @"select " +
-            //    $"{TableName}.{nameof(ProductDto.Name)}," +
-            //    $"{TableName}.{nameof(ProductDto.Id)}," +
-            //    $"{TableName}.{nameof(ProductDto.Description)}," +
-            //    $"{TableName}.{nameof(ProductDto.Quantity)}," +
-            //    $"{TableName}.{nameof(ProductDto.Brend)}," +
-            //    $"{TableName}.{nameof(ProductDto.Price)}, " +
-            //    $"{TableName}.{nameof(ProductDto.Image)}, " +
-            //    $"typeСharacteristics.name as typeСharacteristicName, " +
-            //    $"Сharacteristics.Сharacteristicname, " +
-            //    $"Сharacteristics.Сharacteristic  " +
-            //    $" From {TableName} " +
-            //    $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
-            //     " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid "+
-            //     $" join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.ProductId} " +  
-            //      " where products.id = @id ";
 
             string sql = $"select * FROM {TableName} " +
     $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
      " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid " +
-    $" join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {ProductsRepository.TableName}.{CommentsRepository.Id} " +
+    $" left join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.TableName}.{CommentsRepository.ProductId} " +
       " where products.id = @id ";
 
             var list = (await _connection.QueryAsync(sql, new
@@ -76,7 +60,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 {
                     Name = p.Key,
                     Charastitics = list.Where(t => t.typeСharacteristicsname == p.Key)
-                     .DistinctBy(p => p.Сharacteristicname)
+                    .DistinctBy(p => p.Сharacteristicname)
                     .Select(k => new Charastitic()
                     {
                         Name = k.Сharacteristicname,
@@ -84,7 +68,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                     }).ToList()
 
                 }).ToList(),
-                Comments = list.Select(p => new CommentDto()
+                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment)).Select(p => new CommentDto()
                 {
                     Comment = p.comment,
                     Dignity = p.dignity,

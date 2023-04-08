@@ -57,4 +57,7 @@ export class AppComponent {
     console.log(name);
     this.router.navigate(['/Subcategories/'+ name]);
   }
+  Registaration(){
+    this.router.navigate(['/Registration/']);
+  }
 }
