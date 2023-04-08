@@ -26,8 +26,6 @@ namespace Market
             Environment.SetEnvironmentVariable("Password", "123qwe45asd");
             Environment.SetEnvironmentVariable("Port", "5432");
             Environment.SetEnvironmentVariable("Username", "postgres");
-
-
 #endif
 
 
@@ -49,7 +47,6 @@ namespace Market
 
             #region Создание и заполнение БД
             DataBaseCreater creater = new DataBaseCreater(configs, logger);
-           
             creater.Create();
             
 

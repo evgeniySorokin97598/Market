@@ -16,7 +16,9 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public ISubcategoryRepository SubcategoryRepository { get; private set; }
 
-        public IProductsRepository ProductsRepository { get; }
+        public IProductsRepository ProductsRepository { get; private set; }
+
+        public ICommentsRepository CommentsRepository { get; private set; }
 
         private LoggerLib.Interfaces.ILogger _logger;
         public DataBaseManager(Configs config,LoggerLib.Interfaces.ILogger logger)
@@ -28,6 +30,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             CategoriesRepository = new CategoriesRepository(connection);
             SubcategoryRepository = new SubcategoryRepository(connection);
             ProductsRepository = new ProductsRepository(connection);
+            CommentsRepository = new CommentsRepository(connection);
         }
 
         public async Task AddTestData()

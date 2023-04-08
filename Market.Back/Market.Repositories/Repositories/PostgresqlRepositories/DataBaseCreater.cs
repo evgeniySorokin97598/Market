@@ -35,6 +35,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             //Connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
             Connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
 
+            
 
             //категории товаров
             _commandsCreate.Add(@"CREATE TABLE IF NOT EXISTS Categories
@@ -63,15 +64,17 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     Quantity integer,
     Brend text NOT NULL,
     ImageUrl text,
-    SubcategoryId INTEGER REFERENCES subcategory (Id) NOT NULL,
-    СharacteristicId SERIAL UNIQUE
-);");
+    SubcategoryId INTEGER REFERENCES subcategory (Id) NOT NULL, " + 
+    
+
+    " СharacteristicId SERIAL UNIQUE "+
+");");
             /// таблица с типами характеристик конкретного товара для телефона например
             /// "Сотовая связь","Камера"
             _commandsCreate.Add(@"CREATE  TABLE IF NOT EXISTS  TypeСharacteristics
 (
     Id SERIAL PRIMARY KEY,
-    Name text,
+    TypeСharacteristicsName text,
     ProductId bigint REFERENCES Products (СharacteristicId) NOT NULL  
 );");
 
@@ -86,7 +89,21 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     TypeСharacteristicsId bigint REFERENCES TypeСharacteristics (Id) NOT NULL
 );");
 
+            /// комментарии
+            _commandsCreate.Add($"CREATE  TABLE IF NOT EXISTS  {CommentsRepository.TableName}" +
+"(" +
+    $" {CommentsRepository.Id} SERIAL PRIMARY KEY, " +
+    $" {CommentsRepository.DignityColumnName} text, " +
+    $" {CommentsRepository.Flaws} text, " +
+    $" {CommentsRepository.Comment} text, " +
+    $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL  " +
+");") ;
+
+    //        /// добавление внешнего ключа комментариев в таблицу с товарами
+    //        _commandsCreate.Add($"ALTER TABLE {ProductsRepository.TableName} "+
+    //$"ADD CONSTRAINT fk_products_comments FOREIGN KEY ({ProductsRepository.Id}) REFERENCES {CommentsRepository.TableName} ({CommentsRepository.Id});");
         }
+
 
         /// <summary>
         /// создание таблиц
@@ -96,8 +113,11 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             //if (_dataBaseExist) return;
             foreach (var t in _commandsCreate)
             {
-
-                Connection.Execute(t);
+                try
+                {
+                    Connection.Execute(t);
+                }
+                catch (Exception ex) { }
             }
 
         }

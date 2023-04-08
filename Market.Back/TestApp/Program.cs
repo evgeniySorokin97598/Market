@@ -12,7 +12,7 @@ namespace TestApp
         {
             //DataBaseCreater creater = new DataBaseCreater();
             //creater.Create();
-            //manager = new DataBaseManager();
+             
             ////CreateCategories();
 
             //try
@@ -21,8 +21,10 @@ namespace TestApp
             //}
             //catch (Exception ex) {
             //    Console.WriteLine("error " + ex.Message);
-            
+
             //}
+
+            
         }
 
 

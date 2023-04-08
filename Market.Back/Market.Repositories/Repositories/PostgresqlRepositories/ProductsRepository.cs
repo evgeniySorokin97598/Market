@@ -20,37 +20,45 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         private NpgsqlConnection _connection;
         public static string TableName = "Products";
         public static string SubCategoryIdColumn = "SubcategoryId";
+        public static string Id = "id";
+        public static string CommentsForKey = "commmetsId";
 
         public ProductsRepository(NpgsqlConnection connection)
         {
             _connection = connection;
-
         }
 
         public async Task<ProductDto> GetProductById(long Id)
         {
 
-            string sql = @"select " +
-                $"{TableName}.{nameof(ProductDto.Name)}," +
-                $"{TableName}.{nameof(ProductDto.Id)}," +
-                $"{TableName}.{nameof(ProductDto.Description)}," +
-                $"{TableName}.{nameof(ProductDto.Quantity)}," +
-                $"{TableName}.{nameof(ProductDto.Brend)}," +
-                $"{TableName}.{nameof(ProductDto.Price)}, " +
-                $"{TableName}.{nameof(ProductDto.Image)}, " +
-                $"typeСharacteristics.name as typeСharacteristicName, " +
-                $"Сharacteristics.Сharacteristicname, " +
-                $"Сharacteristics.Сharacteristic  " +
-                $" From {TableName} " +
-                @"join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid
-                  join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid
-                  where products.id = @id";
+            //string sql = @"select " +
+            //    $"{TableName}.{nameof(ProductDto.Name)}," +
+            //    $"{TableName}.{nameof(ProductDto.Id)}," +
+            //    $"{TableName}.{nameof(ProductDto.Description)}," +
+            //    $"{TableName}.{nameof(ProductDto.Quantity)}," +
+            //    $"{TableName}.{nameof(ProductDto.Brend)}," +
+            //    $"{TableName}.{nameof(ProductDto.Price)}, " +
+            //    $"{TableName}.{nameof(ProductDto.Image)}, " +
+            //    $"typeСharacteristics.name as typeСharacteristicName, " +
+            //    $"Сharacteristics.Сharacteristicname, " +
+            //    $"Сharacteristics.Сharacteristic  " +
+            //    $" From {TableName} " +
+            //    $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
+            //     " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid "+
+            //     $" join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.ProductId} " +  
+            //      " where products.id = @id ";
+
+            string sql = $"select * FROM {TableName} " +
+    $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
+     " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid " +
+    $" join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {ProductsRepository.TableName}.{CommentsRepository.Id} " +
+      " where products.id = @id ";
 
             var list = (await _connection.QueryAsync(sql, new
             {
                 Id
             }));
-            
+
             var first = list.FirstOrDefault();
             ProductDto product = new ProductDto()
             {
@@ -61,35 +69,27 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 Image = first.image,
                 Price = first.price,
                 Quantity = first.quantity,
+                TypesCharacteristics = list.GroupBy(l => l.typeСharacteristicsname).Select(p => new ProductCharacteristicType()
+                {
+                    Name = p.Key,
+                    Charastitics = list.Where(t => t.typeСharacteristicsname == p.Key)
+                    .Select(k => new Charastitic()
+                    {
+                        Name = k.Сharacteristicname,
+                        Text = k.Сharacteristic
+                    }).ToList()
+
+                }).ToList(),
+                Comments = list.Select(p => new CommentDto()
+                {
+                    Comment = p.comment,
+                    Dignity = p.dignity,
+                    Flaws = p.flaws,
+                }).ToList()
             };
 
 
-            foreach (var t in list)
-            {
-                var type = product.TypesCharacteristics.FirstOrDefault(p => p.Name == t.typeСharacteristicname);
-                if (type != null)
-                {
-                    type.Charastitics.Add(new Charastitic()
-                    {
-                        Name = t.Сharacteristicname,
-                        Text = t.Сharacteristic
-                    });
-                }
-                else
-                {
-                    var newType = new ProductCharacteristicType()
-                    {
-                        Name = t.typeСharacteristicname,
-                    };
-                    newType.Charastitics.Add(new Charastitic()
-                    {
-                        Name = t.Сharacteristicname,
-                        Text = t.Сharacteristic
-                    });
 
-                    product.TypesCharacteristics.Add(newType);
-                }
-            }
 
             return product;
         }
@@ -139,8 +139,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public async Task AddCharectiristic(ProductCharacteristicType characteristic)
         {
 
-             
-            string insetTypeChararistic = $"INSERT INTO typeСharacteristics (Name,ProductId) VALUES(@Name,@ProductId) returning id";
+
+            string insetTypeChararistic = $"INSERT INTO typeСharacteristics (typeСharacteristicsName,ProductId) VALUES(@Name,@ProductId) returning id";
             string insetChararistic = $" INSERT INTO Сharacteristics (Сharacteristicname,TypeСharacteristicsId,Сharacteristic) VALUES(@Сharacteristic,@TypeId,@Text)";
 
             //// получения айдишника нового типа хараектристики

@@ -17,5 +17,6 @@ namespace Market.Entities.Dto
         public string Brend { get; set; }
         public long SubCategoryid { get; set; }
         public List<ProductCharacteristicType> TypesCharacteristics { get; set; } = new List<ProductCharacteristicType>();
+        public List<CommentDto> Comments { get; set; } = new List<CommentDto>();
     }
 }
