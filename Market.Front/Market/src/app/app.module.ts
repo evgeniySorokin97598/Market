@@ -29,6 +29,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { ConfigurationService } from './Services/ConfigService';
+import {MatCardModule} from '@angular/material/card';
 
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
@@ -49,7 +50,7 @@ const routes: Routes = [
   ],
   imports: [
      
-        
+    MatCardModule,
     MatInputModule,     
     BrowserModule,
     AppRoutingModule,

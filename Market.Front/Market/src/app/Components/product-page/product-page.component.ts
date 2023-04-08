@@ -19,7 +19,7 @@ export class ProductPageComponent implements OnInit {
   currentRate:number = 2;
    
 
-  constructor(private _router: ActivatedRoute,private _service: BaseService,config: NgbRatingConfig, private helper:ProductsHelper) { 
+  constructor(private _router: ActivatedRoute,private _service: BaseService,config: NgbRatingConfig, private helper:ProductsHelper,) { 
 
     config.max = 5;
   }

@@ -27,8 +27,6 @@ export class DataLoader{
             resolve(data);
             this._apiUrl = data
             console.log(data);
-             
-            
         });
 
      }));

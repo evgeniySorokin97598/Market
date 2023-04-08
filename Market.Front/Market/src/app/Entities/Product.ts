@@ -7,9 +7,15 @@ export class Product{
    public image:string = ""; //// ссылка на картинку
    public quantity:number = 0;
    public brend:string = "";
-   
+   public comments:Comment[] = [];
    public typesCharacteristics:CharacteristicType[] = []; ///массив с характеристиками товара
-
+   
+}
+export class Comment{
+   public dignity:string = ""
+   public comment:string = "";
+  public flaws:string = "";
+   public rating:number = 1;
 }
 
 export class CharacteristicType{

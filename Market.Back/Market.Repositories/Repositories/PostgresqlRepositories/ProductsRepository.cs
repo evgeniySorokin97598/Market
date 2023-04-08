@@ -60,6 +60,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             }));
 
             var first = list.FirstOrDefault();
+            if (first == null) return null;
             ProductDto product = new ProductDto()
             {
                 Id = first.id,
@@ -69,10 +70,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 Image = first.image,
                 Price = first.price,
                 Quantity = first.quantity,
-                TypesCharacteristics = list.GroupBy(l => l.typeСharacteristicsname).Select(p => new ProductCharacteristicType()
+                TypesCharacteristics = list
+                .GroupBy(l => l.typeСharacteristicsname)
+                .Select(p => new ProductCharacteristicType()
                 {
                     Name = p.Key,
                     Charastitics = list.Where(t => t.typeСharacteristicsname == p.Key)
+                     .DistinctBy(p => p.Сharacteristicname)
                     .Select(k => new Charastitic()
                     {
                         Name = k.Сharacteristicname,
@@ -143,7 +147,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             string insetTypeChararistic = $"INSERT INTO typeСharacteristics (typeСharacteristicsName,ProductId) VALUES(@Name,@ProductId) returning id";
             string insetChararistic = $" INSERT INTO Сharacteristics (Сharacteristicname,TypeСharacteristicsId,Сharacteristic) VALUES(@Сharacteristic,@TypeId,@Text)";
 
-            //// получения айдишника нового типа хараектристики
+            //// получение айдишника нового типа хараектристики
             long id = (await _connection.QueryAsync<long>(insetTypeChararistic, new
             {
                 Name = characteristic.Name,

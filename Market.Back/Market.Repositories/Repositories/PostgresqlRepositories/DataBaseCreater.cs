@@ -99,6 +99,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL  " +
 ");") ;
 
+
     //        /// добавление внешнего ключа комментариев в таблицу с товарами
     //        _commandsCreate.Add($"ALTER TABLE {ProductsRepository.TableName} "+
     //$"ADD CONSTRAINT fk_products_comments FOREIGN KEY ({ProductsRepository.Id}) REFERENCES {CommentsRepository.TableName} ({CommentsRepository.Id});");
