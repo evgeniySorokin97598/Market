@@ -55,9 +55,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 ProductId = request.ProductId,
                 userId = id
             });
-
-
-
         }
     }
 }
