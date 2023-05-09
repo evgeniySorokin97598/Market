@@ -87,6 +87,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     TypeСharacteristicsId bigint REFERENCES TypeСharacteristics (Id) NOT NULL
 );");
 
+            /// таблица с пользователями
+            _commandsCreate.Add($"CREATE  TABLE IF NOT EXISTS {UsersRepository.Table} (" +
+                $"{UsersRepository.IdCol} SERIAL PRIMARY KEY," +
+                $"{UsersRepository.Nickname} text," +
+                $"{UsersRepository.UserId} text" +
+                $")");
+
             /// комментарии
             _commandsCreate.Add($"CREATE  TABLE IF NOT EXISTS  {CommentsRepository.TableName}" +
 "(" +
@@ -94,10 +101,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" {CommentsRepository.DignityColumnName} text, " +
     $" {CommentsRepository.Flaws} text, " +
     $" {CommentsRepository.Comment} text, " +
-    $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL  " +
+    $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL,  " +
+    $" {CommentsRepository.UserIdCol} bigint REFERENCES {UsersRepository.Table} ({UsersRepository.IdCol})  " +
 
 ");") ;
 
+            
 
 
     //        /// добавление внешнего ключа комментариев в таблицу с товарами

@@ -42,7 +42,6 @@ namespace Market.Controllers
             {
                 Id = User.FindFirstValue(JwtClaimTypes.ClientId),
                 Username = User.FindFirstValue("username"),
-
             };
 
         }

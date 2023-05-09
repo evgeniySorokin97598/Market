@@ -34,18 +34,30 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public static string Comment = "Comment";
 
         public static string ProductId = "ProductId";
-
+        public static string UserIdCol = "UserId";
         private NpgsqlConnection _connection;
-
-        public CommentsRepository(NpgsqlConnection connection)
+        private IUsersRepository _usersRepository;
+        public CommentsRepository(NpgsqlConnection connection, IUsersRepository usersRepository)
         {
             _connection = connection;
+            _usersRepository = usersRepository;
         }
 
         public async Task AddAsync(AddCommentRequest request, UserInfo info)
         {
-            string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId)";
-            await _connection.QueryAsync(sql, request);
+            long id = await _usersRepository.GetUser(info);
+            string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId},{UsersRepository.UserId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId,@userId)";
+            await _connection.QueryAsync(sql, new
+            {
+                Dignity = request.Dignity,
+                Flaws = request.Flaws,
+                Comment = request.Comment,
+                ProductId = request.ProductId,
+                userId = id
+            });
+
+
+
         }
     }
 }
