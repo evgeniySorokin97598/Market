@@ -18,7 +18,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
 
         private NpgsqlConnection _connection;
-        public static string TableName = "Products";
+        public static string TableName = "Products".ToLower();
         public static string SubCategoryIdColumn = "SubcategoryId";
         public static string Id = "id";
         public static string CommentsForKey = "commmetsId";
@@ -28,7 +28,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             _connection = connection;
         }
 
-        public async Task<ProductDto> GetProductById(long Id)
+        public async Task<ProductDto> GetProductById(long id)
         {
 
 
@@ -36,11 +36,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
      " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid " +
     $" left join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.TableName}.{CommentsRepository.ProductId} " +
-      " where products.id = @id ";
+    $" left join {UsersRepository.Table} on {CommentsRepository.TableName}.{CommentsRepository.UserIdCol} = {UsersRepository.Table}.{UsersRepository.IdCol}" +
+      $" where {TableName}.{Id} = @id ";
 
             var list = (await _connection.QueryAsync(sql, new
             {
-                Id
+                id
             }));
 
             var first = list.FirstOrDefault();
@@ -66,13 +67,13 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         Name = k.Сharacteristicname,
                         Text = k.Сharacteristic
                     }).ToList()
-
                 }).ToList(),
                 Comments = list.Where(p => !string.IsNullOrEmpty(p.comment)).Select(p => new CommentDto()
                 {
                     Comment = p.comment,
                     Dignity = p.dignity,
                     Flaws = p.flaws,
+                    UserName = p.nickname,
                 }).ToList()
             };
 

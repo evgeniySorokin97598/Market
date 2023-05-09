@@ -11,5 +11,6 @@ namespace Market.Entities.Dto
         public string Dignity { get; set; }
         public string Comment { get; set; }
         public string Flaws { get; set; }
+        public string UserName { get; set; }
     }
 }

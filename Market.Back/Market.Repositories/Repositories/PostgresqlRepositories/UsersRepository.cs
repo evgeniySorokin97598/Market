@@ -32,7 +32,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             {
                 user = info.Id
             })).FirstOrDefault();
-            if (result == 0)
+            if (result == 0) // если пользователь раньше не был создан
             {
                 return await AddAsync(info);
             }
@@ -41,7 +41,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public async Task<long> AddAsync(UserInfo info)
         {
-            string sql = $"INSERT INTO {Table} ({IdCol},{Nickname}) VALUES (@UserId,@nick) returning id";
+            string sql = $"INSERT INTO {Table} ({UserId},{Nickname}) VALUES (@UserId,@nick) returning id";
             var result = (await _connection.QueryAsync<long>(sql, new
             {
                 UserId = info.Id,

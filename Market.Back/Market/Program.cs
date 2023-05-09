@@ -83,7 +83,6 @@ namespace Market
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
             }
             
             app.UseCors("MyPolicy");
