@@ -1,7 +1,10 @@
-﻿using Market.Entities.Requests;
+﻿using IdentityModel;
+using Market.Entities.Dto;
+using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Market.Controllers
 {
@@ -10,7 +13,7 @@ namespace Market.Controllers
     {
         private readonly ICommentsRepository _repository;
         private LoggerLib.Interfaces.ILogger _Logger;
-        public CommentsController(IDataBaseManager manager,LoggerLib.Interfaces.ILogger logger)
+        public CommentsController(IDataBaseManager manager, LoggerLib.Interfaces.ILogger logger)
         {
             _repository = manager.CommentsRepository;
             _Logger = logger;
@@ -22,7 +25,7 @@ namespace Market.Controllers
         {
             try
             {
-                await _repository.AddAsync(request);
+                await _repository.AddAsync(request, GetUserInfo());
                 return Ok();
             }
             catch (Exception ex)
@@ -30,6 +33,17 @@ namespace Market.Controllers
                 _Logger.Error($"Ошибка при добавлении комментария {ex.Message}");
                 return StatusCode(500);
             }
+
+        }
+
+        private UserInfo GetUserInfo()
+        {
+            return new UserInfo()
+            {
+                Id = User.FindFirstValue(JwtClaimTypes.ClientId),
+                Username = User.FindFirstValue("username"),
+
+            };
 
         }
     }

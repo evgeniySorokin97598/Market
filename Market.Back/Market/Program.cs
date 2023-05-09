@@ -5,6 +5,7 @@ using Market.Entities.Configs;
 using Market.Repositories.Interfaces;
 using Market.Repositories.Repositories.PostgresqlRepositories;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace Market
 {
@@ -58,12 +59,14 @@ namespace Market
             #endregion
             builder.Services.AddSingleton(configs);
             builder.Services.AddTransient<IDataBaseManager, DataBaseManager>();
+            IdentityModelEventSource.ShowPII = true;
 
             builder.Services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
     .AddIdentityServerAuthentication(options =>
     {
-        options.Authority = "https://localhost:7261";
-
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.Authority = "http://localhost:5234";
     });
             builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {

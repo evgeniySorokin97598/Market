@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Market.Entities.Dto;
 using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Npgsql;
@@ -41,7 +42,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             _connection = connection;
         }
 
-        public async Task AddAsync(AddCommentRequest request)
+        public async Task AddAsync(AddCommentRequest request, UserInfo info)
         {
             string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId)";
             await _connection.QueryAsync(sql, request);

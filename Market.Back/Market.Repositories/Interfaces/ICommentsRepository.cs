@@ -1,4 +1,5 @@
-﻿using Market.Entities.Requests;
+﻿using Market.Entities.Dto;
+using Market.Entities.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Market.Repositories.Interfaces
 {
     public interface ICommentsRepository
     {
-        public Task AddAsync(AddCommentRequest request);
+        public Task AddAsync(AddCommentRequest request, UserInfo userInfo);
     }
 }

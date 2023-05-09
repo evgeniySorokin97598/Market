@@ -65,8 +65,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     Brend text NOT NULL,
     ImageUrl text,
     SubcategoryId INTEGER REFERENCES subcategory (Id) NOT NULL, " + 
-    
-
     " СharacteristicId SERIAL UNIQUE "+
 ");");
             /// таблица с типами характеристик конкретного товара для телефона например
@@ -97,7 +95,9 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" {CommentsRepository.Flaws} text, " +
     $" {CommentsRepository.Comment} text, " +
     $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL  " +
+
 ");") ;
+
 
 
     //        /// добавление внешнего ключа комментариев в таблицу с товарами
