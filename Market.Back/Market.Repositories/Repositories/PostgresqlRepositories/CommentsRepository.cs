@@ -45,16 +45,22 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public async Task AddAsync(AddCommentRequest request, UserInfo info)
         {
-            long id = await _usersRepository.GetUser(info);
-            string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId},{UsersRepository.UserId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId,@userId)";
-            await _connection.QueryAsync(sql, new
+
+            if (!string.IsNullOrEmpty(request?.Comment)|| !string.IsNullOrEmpty(request?.Dignity)||!string.IsNullOrEmpty(request?.Flaws)) 
             {
-                Dignity = request.Dignity,
-                Flaws = request.Flaws,
-                Comment = request.Comment,
-                ProductId = request.ProductId,
-                userId = id
-            });
+                long id = await _usersRepository.GetUser(info);
+                string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId},{UsersRepository.UserId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId,@userId)";
+                await _connection.QueryAsync(sql, new
+                {
+                    Dignity = request.Dignity,
+                    Flaws = request.Flaws,
+                    Comment = request.Comment,
+                    ProductId = request.ProductId,
+                    userId = id
+                });
+            }
+            
+            
         }
     }
 }

@@ -29,6 +29,43 @@
 		 
 	</ng-template>
 	
+	<ng-template #content2 let-modal  >
+		<div class="modal-header" style="background-color: #ACA9A9;">
+			<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+			<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+		</div>
+		<div class="modal-body" style="background-color: #ACA9A9;" >
+				<app-regisration   (onSuggest)= "modal.close('Save click')"  ></app-regisration>
+		</div>
+		<div class="modal-footer" style="background-color: #ACA9A9;">
+			<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Отмена</button>
+		</div>
+	</ng-template>	 
+	
+	<ng-template #content3 let-authModal  >
+		<div class="modal-header" style="background-color: #ACA9A9;">
+			<h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+			<button type="button" class="btn-close" aria-label="Close" (click)="authModal.dismiss('Cross click')"></button>
+		</div>
+		<div class="modal-body" style="background-color: #ACA9A9;" >
+			<mat-form-field class="example-form-field">
+				<mat-label>логин</mat-label>
+				<input matInput type="text" [(ngModel)]="model.userName">
+				
+			  </mat-form-field>
+			  <br>
+			  <mat-form-field class="example-form-field">
+				<mat-label>пароль</mat-label>
+				<input matInput type="password" [(ngModel)]="model.password">
+			  </mat-form-field>
+			  <br>
+			  <button mat-button style="color: white;" (click) = "Authorize()">авторизация</button>
+		</div>
+		<div class="modal-footer" style="background-color: #ACA9A9;">
+			<button type="button" class="btn btn-outline-dark" id="closebutton" (click)="authModal.close('Save click')">Отмена</button>
+		</div>
+	</ng-template>	 
+	 
 	<p>
 		<mat-toolbar color="primary" style="height: 80px;">
 		  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
@@ -44,9 +81,16 @@
 			<button mat-raised-button color="primary" style="  float: right;   width: 150px;  " (click)="ShowProductsBasket()"  matBadge="{{productsHelper.numbers.length}}" [matBadgeHidden]="productsHelper.numbers.length == 0" matBadgeSize="large">
 				корзина <mat-icon  >shopping_basket</mat-icon>
 			  </button>
-			  <button mat-raised-button color="primary" style=" margin-right: 30px; float: right;   width: 150px;  " (click)="Registaration()"   matBadgeSize="large">
+
+			  <button mat-raised-button color="primary" (click)="open(content3)" class="btn btn-lg btn-outline-primary"   style=" margin-right: 30px; float: right;   width: 150px;  "    matBadgeSize="large">
+				авторизация  
+			  </button>
+
+			  <button mat-raised-button color="primary" (click)="open(content2)" class="btn btn-lg btn-outline-primary"   style=" margin-right: 30px; float: right;   width: 150px;  "    matBadgeSize="large">
 				регистрация  
 			  </button>
+			  <p ngModel = [(authMessage)] style=" margin-right:260px; float: right;   width: 150px;  " >{{authMessage}} </p>
+			   
 		  </div>
 		  
 		   
@@ -60,6 +104,7 @@
 	<div class="content">
 		 
 		<router-outlet ></router-outlet>
+		
 	</div>	
 	
 </div>	

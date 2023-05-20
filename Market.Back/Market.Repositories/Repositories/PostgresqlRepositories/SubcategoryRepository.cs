@@ -27,7 +27,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         }
         public async Task<int> AddAsync(SubCategory category)
         {
-
             string checkSql = $"SELECT {IdColumnName} FROM {TableName} WHERE {NameColumnName} = @name";
             var check = await _connection.QueryAsync<int>(checkSql, new { name = category.SubCategoryName });
             if (!check.Any())

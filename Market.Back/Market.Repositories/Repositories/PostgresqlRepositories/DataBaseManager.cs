@@ -72,7 +72,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         SubCategoryUrlIcon = "https://imdiz.ru/files/store/img/icons_catalog/desktops.png"
                     });
 
-
                     for (int i = 0; i < 40; i++)
                     {
 
@@ -87,6 +86,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                             Quantity = new Random().Next(1, 100),
                         }).GetAwaiter().GetResult(); ;
                         await AddCharectiristic(id);
+                        
                     }
 
                 }

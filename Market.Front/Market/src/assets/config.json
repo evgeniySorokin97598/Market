@@ -1,5 +1,5 @@
 {
   "apiUrl": "https://localhost:44315/",
-  "identetyUrl":"https://localhost:44386/"
+  "identetyUrl":"http://localhost:5234/"
 
 }

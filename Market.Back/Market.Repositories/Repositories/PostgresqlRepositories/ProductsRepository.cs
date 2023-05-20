@@ -18,7 +18,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
 
         private NpgsqlConnection _connection;
-        public static string TableName = "Products".ToLower();
+        public static string TableName = "products";
         public static string SubCategoryIdColumn = "SubcategoryId";
         public static string Id = "id";
         public static string CommentsForKey = "commmetsId";
@@ -36,7 +36,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
      " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid " +
     $" left join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.TableName}.{CommentsRepository.ProductId} " +
-    $" left join {UsersRepository.Table} on {CommentsRepository.TableName}.{CommentsRepository.UserIdCol} = {UsersRepository.Table}.{UsersRepository.IdCol}" +
+    $" left join {UsersRepository.Table} on {CommentsRepository.TableName}.{CommentsRepository.UserIdCol} = {UsersRepository.Table}.{UsersRepository.IdCol}" + /// join пользователей которые оставляли комментарии
       $" where {TableName}.{Id} = @id ";
 
             var list = (await _connection.QueryAsync(sql, new
@@ -68,18 +68,14 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         Text = k.Сharacteristic
                     }).ToList()
                 }).ToList(),
-                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment)).Select(p => new CommentDto()
+                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity)|| !string.IsNullOrEmpty(p.flaws)).Select(p => new CommentDto()
                 {
                     Comment = p.comment,
                     Dignity = p.dignity,
                     Flaws = p.flaws,
-                    UserName = p.nickname,
+                    UserName = string.IsNullOrEmpty(p.nickname) ? "Пользователь" : p.nickname,
                 }).ToList()
             };
-
-
-
-
             return product;
         }
 

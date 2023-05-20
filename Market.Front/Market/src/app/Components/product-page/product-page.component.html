@@ -1,39 +1,42 @@
 
-<div class="wrapper">
-    <div class="headerBox">
-        <ngb-rating  [(rate)]="currentRate" ></ngb-rating>
-        <span  style="margin-left: 10px;">{{Product.name}}</span>
-
-    </div>
+<div class="wrapper" >
      
-    <div class="box2">
-        
-        <ngb-carousel *ngIf="images" >
-            <ng-template ngbSlide >
-                <div  >
-                    <img [src]="images[0]" style="height:330px; width: 100%" alt="Random first slide" />
-                </div>
-                
-            </ng-template>
-            
-        </ngb-carousel>
 
-    </div>
-    <div class="box3">
-        <span style="width: 30px;">Появилсь вопросы?</span>
-    </div>
-
-    <div class="box5">
-        <p class="price" >{{Product.price}} ₽</p>
-         
-        <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; ">
-            в избранное  <mat-icon>bookmark</mat-icon>
-        </button>
-          <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " (click) = "AddToCart()">
-            Добавить в корзину <mat-icon>add_shopping_cart</mat-icon>
-        </button>
-    </div>
     
+        <div class="headerBox">
+            <ngb-rating  [(rate)]="currentRate" ></ngb-rating>
+            <span  style="margin-left: 10px;">{{Product.name}}</span>
+
+        </div>
+        
+        <div class="box2">
+            
+            <ngb-carousel *ngIf="images" >
+                <ng-template ngbSlide >
+                    <div style="width: 70%;" >
+                        <img [src]="images[0]" style="height:330px; width: 100%" alt="Random first slide" />
+                    </div>
+                    
+                </ng-template>
+                
+            </ngb-carousel>
+
+        </div>
+        <div class="box3">
+            <span style="width: 30px;">Появилсь вопросы?</span>
+        </div>
+
+        <div class="box5">
+            <p class="price" >{{Product.price}} ₽</p>
+            
+            <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; ">
+                в избранное  <mat-icon>bookmark</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" style="width: 90%; margin-left: 5%;  margin-top: 5px;  height: 20%; " (click) = "AddToCart()">
+                Добавить в корзину <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+        </div>
+     
     <div class="box4"><div >
         
         

@@ -28,6 +28,6 @@ public class HomeController : Controller
         {
             _logger.Error(ex.Message);
             return StatusCode(500, ex.Message);
-        };
+        }
     }
 }

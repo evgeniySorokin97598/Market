@@ -13,8 +13,6 @@ export class HttpClientHelper{
         HttpClientHelper._headers = value;
         
     }
-     
- 
     constructor(private http :HttpClient){
 
     }
@@ -33,6 +31,7 @@ export class HttpClientHelper{
             },
             (error) => {
                 console.log(error);
+                alert(error);
               }
             );
 
@@ -54,6 +53,8 @@ export class HttpClientHelper{
             },
             (error) => {
                 console.log(error);
+                
+                
               }
             );
 
@@ -75,6 +76,7 @@ export class HttpClientHelper{
             },
             (error) => {
                 console.log(error);
+                alert(error);
               }
             );
 
@@ -97,6 +99,7 @@ export class HttpClientHelper{
             },
             (error) => {
                 console.log(error);
+                alert(error);
               }
             );
         }));

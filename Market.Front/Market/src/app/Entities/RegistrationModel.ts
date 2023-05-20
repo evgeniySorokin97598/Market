@@ -9,4 +9,9 @@ export class RegistrationModel{
     public email = "";
     public password = "";
     public phone = "";
+    public userName = ""
+}
+export class AuthorizationModel{
+    public userName = "";
+    public password = "";
 }
