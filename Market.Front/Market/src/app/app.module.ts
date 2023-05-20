@@ -34,6 +34,7 @@ import { RegisrationComponent } from './Components/regisration/regisration.compo
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {  ReactiveFormsModule} from '@angular/forms';
 import { IdentetyService } from './Services/IdentetyService';
+import { CommentComponent } from './Components/comment/comment.component';
  
 const routes: Routes = [
   {path: 'Products/:SubCategoryName', component:ProductsListComponent},
@@ -51,6 +52,7 @@ const routes: Routes = [
     ShoppingCartComponent,
     CategoryListComponent,
     RegisrationComponent,
+    CommentComponent,
      
      
   ],

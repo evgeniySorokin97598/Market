@@ -1,0 +1,20 @@
+ 
+ <ngb-rating  [(rate)]="comment.stars" ></ngb-rating>
+ <br>
+
+  <mat-form-field   class="input">
+    <mat-label>Достоинства</mat-label>
+    <input matInput  [(ngModel)]="comment.dignity">
+  </mat-form-field>
+ <br>
+  <mat-form-field class="input">
+    <mat-label>Недостки</mat-label>
+    <input matInput   [(ngModel)]="comment.flaws" >
+  </mat-form-field>
+  <br>
+  <mat-form-field   class="input">
+    <mat-label>Комментарий</mat-label>
+    <input matInput   [(ngModel)]="comment.comment">
+  </mat-form-field>
+
+  

@@ -11,7 +11,8 @@ namespace Market.Entities.Requests
         public string Dignity { get; set; }
         public string Comment { get; set; }
         public string Flaws { get; set; }    
-
+        public int Stars { get; set; }
         public int ProductId { get; set; }
+         
     }
 }

@@ -1,5 +1,5 @@
 import { Category, SubCategory } from "../Entities/Category";
-import { Product } from "../Entities/Product";
+import { CommentEntity, Product } from "../Entities/Product";
 import { HttpClientHelper } from "../Helpers/HttpClientHelper";
 import { ConfigurationService } from "../Services/ConfigService";
 
@@ -62,5 +62,10 @@ export class DataLoader{
         await this.Init();
         let url:string = this._apiUrl+ 'Categories/GetSubCategories/'+category;
         return await this._helper.GetRequest(url)
+    }
+    public async SendComment(comment: CommentEntity){
+        await this.Init();
+        let url:string = this._apiUrl+ 'Comments/Add';
+        await this._helper.PostRequest(url,comment)
     }
 }

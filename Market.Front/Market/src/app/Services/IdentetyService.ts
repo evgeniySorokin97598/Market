@@ -8,8 +8,9 @@ import { ConfigurationService } from "./ConfigService";
 export class IdentetyService{
     _apiUrl = "";
     headers : HttpHeaders = new HttpHeaders();
-    
-    public onAuth: EventEmitter<string> = new EventEmitter(); /// событие успешной авторизации
+   public IsAuthorize: boolean = false;
+
+   public onAuth: EventEmitter<string> = new EventEmitter(); /// событие успешной авторизации
 
    constructor(private helper:HttpClientHelper,private configurationService: ConfigurationService){
     
@@ -39,6 +40,7 @@ export class IdentetyService{
          'Authorization': 'Bearer ' + result.token
       });
       this.onAuth.emit(model.userName);
+      this.IsAuthorize = true;
   }
 
    public async Registration(model:RegistrationModel){
@@ -50,6 +52,7 @@ export class IdentetyService{
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + result.token
      });
+     this.IsAuthorize = true;
      this.onAuth.emit(model.userName);
      
    }

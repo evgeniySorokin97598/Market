@@ -4,6 +4,7 @@ using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
 using Npgsql;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     {
         public static string TableName = "Comments";
 
-        public static string Id = "Id";
+        public static string Id = "CommentId";
 
         /// <summary>
         /// колонка с достоинствами товара
@@ -35,6 +36,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public static string ProductId = "ProductId";
         public static string UserIdCol = "UserId";
+        public static string Stars = "Stars";
+        public static string Likes = "likes";
         private NpgsqlConnection _connection;
         private IUsersRepository _usersRepository;
         public CommentsRepository(NpgsqlConnection connection, IUsersRepository usersRepository)
@@ -49,14 +52,15 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             if (!string.IsNullOrEmpty(request?.Comment)|| !string.IsNullOrEmpty(request?.Dignity)||!string.IsNullOrEmpty(request?.Flaws)) 
             {
                 long id = await _usersRepository.GetUser(info);
-                string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId},{UsersRepository.UserId}) VALUES (@Dignity,@Flaws,@Comment,@ProductId,@userId)";
+                string sql = $"INSERT INTO {TableName} ({DignityColumnName},{Flaws},{Comment},{ProductId},{UsersRepository.UserId},{Stars}) VALUES (@Dignity,@Flaws,@Comment,@ProductId,@userId,@stars)";
                 await _connection.QueryAsync(sql, new
                 {
                     Dignity = request.Dignity,
                     Flaws = request.Flaws,
                     Comment = request.Comment,
                     ProductId = request.ProductId,
-                    userId = id
+                    userId = id,
+                    stars = request.Stars,
                 });
             }
             

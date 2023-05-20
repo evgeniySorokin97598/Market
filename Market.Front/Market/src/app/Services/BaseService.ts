@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Category, SubCategory } from "../Entities/Category";
-import { Product } from "../Entities/Product";
+import { CommentEntity, Product } from "../Entities/Product";
 import { HttpClientHelper } from "../Helpers/HttpClientHelper";
 import { DataLoader } from "../Loaders/DataLoader";
 import { ConfigurationService } from "./ConfigService";
@@ -39,6 +39,8 @@ export class BaseService{
     public async GetSubcatories(category:string):Promise<SubCategory[]>{
         return await this._dataLoader.GetSubcatories(category);
     }
-
+    public async SendComment(comment:CommentEntity ){
+        return await this._dataLoader.SendComment(comment);
+    }
 
 }

@@ -102,8 +102,9 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
     $" {CommentsRepository.Flaws} text, " +
     $" {CommentsRepository.Comment} text, " +
     $" {CommentsRepository.ProductId} bigint REFERENCES {ProductsRepository.TableName} ({ProductsRepository.Id}) NOT NULL,  " +
-    $" {CommentsRepository.UserIdCol} bigint REFERENCES {UsersRepository.Table} ({UsersRepository.IdCol})  " +
-
+    $" {CommentsRepository.UserIdCol} bigint REFERENCES {UsersRepository.Table} ({UsersRepository.IdCol}),  " +
+     $" {CommentsRepository.Likes} integer,  " +
+    $" {CommentsRepository.Stars} integer" +
 ");") ;
 
             

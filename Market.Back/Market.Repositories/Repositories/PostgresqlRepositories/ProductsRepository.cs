@@ -68,14 +68,17 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         Text = k.Сharacteristic
                     }).ToList()
                 }).ToList(),
-                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity)|| !string.IsNullOrEmpty(p.flaws)).Select(p => new CommentDto()
+                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity) || !string.IsNullOrEmpty(p.flaws)).Select(p => new CommentDto()
                 {
+                    CommentId = p.commentid,
                     Comment = p.comment,
                     Dignity = p.dignity,
                     Flaws = p.flaws,
                     UserName = string.IsNullOrEmpty(p.nickname) ? "Пользователь" : p.nickname,
+                    Stars= p.stars,
                 }).ToList()
             };
+            product.Comments = product.Comments.DistinctBy(p => p.CommentId).ToList();
             return product;
         }
 
@@ -114,6 +117,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 $" From {TableName} " +
                 $" Join {SubcategoryRepository.TableName} ON {SubcategoryRepository.TableName}.{SubcategoryRepository.IdColumnName} =  {TableName}.{SubCategoryIdColumn}" +
                 $" WHERE {SubcategoryRepository.TableName}.{SubcategoryRepository.NameColumnName} = @Category";
+
             var result = await _connection.QueryAsync<ProductDto>(sql, new
             {
                 Category = categyName

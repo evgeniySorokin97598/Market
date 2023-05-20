@@ -34,7 +34,7 @@ export class AppComponent {
   public hiddenCountCart = true;
   
   model:AuthorizationModel = new AuthorizationModel();
-  authMessage = "dsvsdvdv";
+  authMessage = "";
 
  
   
@@ -46,7 +46,8 @@ export class AppComponent {
     public _identetyService:IdentetyService){
     productsHelper.GetProducts(); /// что бы на фронте сразу кол-во товаров отображалось, а не после какого то заказа
     _identetyService.onAuth.subscribe((username) =>{
-      alert("авторизация успешна" + username);
+      
+      
        this.authMessage = "добрейший вечерочек " + username
        let el: HTMLElement = document.getElementById("closebutton") as HTMLElement;
         el.click();
