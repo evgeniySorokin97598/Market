@@ -36,6 +36,7 @@ namespace Market.Controllers
 
         }
 
+        [NonAction]
         private UserInfo GetUserInfo()
         {
             return new UserInfo()

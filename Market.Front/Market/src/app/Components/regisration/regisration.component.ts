@@ -13,10 +13,11 @@ export class RegisrationComponent implements OnInit {
   
 
  
-  @Output() onSuggest: EventEmitter<any> = new EventEmitter();
  
  
-  public model: RegistrationModel  = new RegistrationModel();
+ 
+  @Input() public model: RegistrationModel  = new RegistrationModel();
+
   public roleForm: FormGroup;
   private _email: string = "";
   public get email(): string {
@@ -40,7 +41,7 @@ export class RegisrationComponent implements OnInit {
   public async Registration(){
     await this._service.Registration(this.model)
     console.log("вызов колбэка");
-    this.onSuggest.emit();
+     
   }
 
   matcher = new MyErrorStateMatcher();

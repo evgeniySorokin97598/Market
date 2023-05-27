@@ -17,6 +17,7 @@ export class CommentEntity{
    public flaws:string = "";
    public productId:number = 0;
    public stars:number = 0;
+   public userName:string = "";
 }
 
 export class CharacteristicType{

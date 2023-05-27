@@ -7,7 +7,7 @@ import { Console } from 'console';
 import { RegisrationComponent } from './Components/regisration/regisration.component';
 import { FiveDayRangeSelectionStrategy } from './Components/shopping-cart/shopping-cart.component';
 import { Category } from './Entities/Category';
-import { AuthorizationModel } from './Entities/RegistrationModel';
+import { AuthorizationModel, RegistrationModel } from './Entities/RegistrationModel';
 import { HttpClientHelper } from './Helpers/HttpClientHelper';
 import { ProductsHelper } from './Helpers/ProductsHelper';
 import { BaseService } from './Services/BaseService';
@@ -36,7 +36,7 @@ export class AppComponent {
   model:AuthorizationModel = new AuthorizationModel();
   authMessage = "";
 
- 
+  public regModel: RegistrationModel  = new RegistrationModel();
   
   constructor(private _service: BaseService,
     private router: Router,
@@ -55,7 +55,11 @@ export class AppComponent {
         this.model.userName = "";
     })
   }
-  
+  public async  Registration():Promise<boolean>{
+    await this._identetyService.Registration(this.regModel)
+    console.log("вызов колбэка");
+     return true;
+  }
 
   async ngOnInit(): Promise<void>{
     await this._service.Init();
@@ -85,6 +89,7 @@ export class AppComponent {
   }
   async Authorize(){
   await this._identetyService.Authorize(this.model)
+  this.model = new AuthorizationModel();
   }
   closeResult = ''
   open(content:any) {

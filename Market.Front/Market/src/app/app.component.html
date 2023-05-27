@@ -35,10 +35,12 @@
 			<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 		</div>
 		<div class="modal-body" style="background-color: #ACA9A9;" >
-				<app-regisration   (onSuggest)= "modal.close('Save click')"  ></app-regisration>
+				<app-regisration   [model] = "regModel"  ></app-regisration>
 		</div>
 		<div class="modal-footer" style="background-color: #ACA9A9;">
-			<button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Отмена</button>
+			<button mat-raised-button color="primary" (click) = "Registration()" style="margin-right:auto">регистрация</button>
+			 
+			
 		</div>
 	</ng-template>	 
 	
@@ -59,10 +61,11 @@
 				<input matInput type="password" [(ngModel)]="model.password">
 			  </mat-form-field>
 			  <br>
-			  <button mat-button style="color: white;" (click) = "Authorize()">авторизация</button>
+			  
 		</div>
 		<div class="modal-footer" style="background-color: #ACA9A9;">
-			<button type="button" class="btn btn-outline-dark" id="closebutton" (click)="authModal.close('Save click')">Отмена</button>
+			<button mat-button style="color: white;" (click) = "Authorize()" style="margin-right:auto" mat-raised-button color="primary">авторизация</button>
+			 
 		</div>
 	</ng-template>	 
 	 
@@ -82,11 +85,16 @@
 				корзина <mat-icon  >shopping_basket</mat-icon>
 			  </button>
 
-			  <button mat-raised-button color="primary" (click)="open(content3)" class="btn btn-lg btn-outline-primary"   style=" margin-right: 30px; float: right;   width: 150px;  "    matBadgeSize="large">
+			  <button mat-raised-button color="primary" 
+			  (click)="open(content3)" 
+			  class="btn btn-lg btn-outline-primary"   
+			  style=" margin-right: 30px; float: right;   width: 150px;  "  
+			  matBadgeSize="large" 
+			  [hidden] = "_identetyService.IsAuthorize == true">
 				авторизация  
 			  </button>
 
-			  <button mat-raised-button color="primary" (click)="open(content2)" class="btn btn-lg btn-outline-primary"   style=" margin-right: 30px; float: right;   width: 150px;  "    matBadgeSize="large">
+			  <button mat-raised-button color="primary" [hidden] = "_identetyService.IsAuthorize == true" (click)="open(content2)" class="btn btn-lg btn-outline-primary"   style=" margin-right: 30px; float: right;   width: 150px;  "    matBadgeSize="large">
 				регистрация  
 			  </button>
 			  <p ngModel = [(authMessage)] style=" margin-right:260px; float: right;   width: 150px;  " >{{authMessage}} </p>

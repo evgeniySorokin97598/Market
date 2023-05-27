@@ -71,13 +71,13 @@ export class HttpClientHelper{
              let responce =   this.http.put<any>(action,obj,{headers: this.headers});
              
              responce.subscribe(
-            (data ) => {
-             resolve(data);
-            },
-            (error) => {
-                console.log(error);
-                alert(error);
-              }
+                (data ) => {
+                resolve(data);
+                },
+                (error) => {
+                    console.log(error);
+                    alert(error);
+                }
             );
 
         }));
@@ -99,7 +99,7 @@ export class HttpClientHelper{
             },
             (error) => {
                 console.log(error);
-                alert(error);
+                 
               }
             );
         }));
