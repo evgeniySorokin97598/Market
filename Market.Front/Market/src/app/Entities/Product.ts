@@ -18,6 +18,8 @@ export class CommentEntity{
    public productId:number = 0;
    public stars:number = 0;
    public userName:string = "";
+   public countLikes:number = 0;
+   public commentId:number = 0;
 }
 
 export class CharacteristicType{

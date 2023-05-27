@@ -12,11 +12,13 @@ namespace Market.Controllers
     public class CommentsController : Controller
     {
         private readonly ICommentsRepository _repository;
+        private readonly ICommentsLikesRepository _likeICommentsLikesRepository;
         private LoggerLib.Interfaces.ILogger _Logger;
         public CommentsController(IDataBaseManager manager, LoggerLib.Interfaces.ILogger logger)
         {
             _repository = manager.CommentsRepository;
             _Logger = logger;
+            _likeICommentsLikesRepository = manager.CommentsLikesRepository;
         }
 
         [Authorize]
@@ -35,6 +37,21 @@ namespace Market.Controllers
             }
 
         }
+        [Authorize]
+        [HttpPost("LikeComment")]
+        public async Task<IActionResult> LikeComment([FromQuery] int id)
+        {
+            try
+            {
+                await _likeICommentsLikesRepository.LikeComment(id, GetUserInfo());
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
 
         [NonAction]
         private UserInfo GetUserInfo()

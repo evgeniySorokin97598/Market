@@ -20,18 +20,22 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
         public ICommentsRepository CommentsRepository { get; private set; }
         public IUsersRepository UsersRepository { get; private set; }
+
+        public ICommentsLikesRepository CommentsLikesRepository { get; private set; }
+
         private LoggerLib.Interfaces.ILogger _logger;
-        public DataBaseManager(Configs config,LoggerLib.Interfaces.ILogger logger)
+        public DataBaseManager(Configs config, LoggerLib.Interfaces.ILogger logger)
         {
             _logger = logger;
 
             //var connection = new NpgsqlConnection($"Host=192.168.133.128;Port=5432;Database = Market; Username=postgres;Password=123qwe45asd");
-            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
-            CategoriesRepository = new CategoriesRepository(connection);
-            SubcategoryRepository = new SubcategoryRepository(connection);
-            ProductsRepository = new ProductsRepository(connection);
-            UsersRepository = new UsersRepository(connection);
-            CommentsRepository = new CommentsRepository(connection, UsersRepository);
+            var connection = new NpgsqlConnection($"Host={config.DataBaseConfig.Host}:{config.DataBaseConfig.Port};Database = Market2; Username={config.DataBaseConfig.Username};Password={config.DataBaseConfig.Password}");
+            CategoriesRepository = new CategoriesRepository.Repository(connection);
+            SubcategoryRepository = new SubcategoryRepository.Repository(connection);
+            ProductsRepository = new ProductsRepository.Repository(connection);
+            UsersRepository = new UsersRepository.Repository(connection);
+            CommentsRepository = new CommentsRepository.Repository(connection, UsersRepository);
+            CommentsLikesRepository = new CommentsLikesRepository.Repository(connection, UsersRepository);
         }
 
         public async Task AddTestData()
@@ -86,7 +90,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                             Quantity = new Random().Next(1, 100),
                         }).GetAwaiter().GetResult(); ;
                         await AddCharectiristic(id);
-                        
+
                     }
 
                 }

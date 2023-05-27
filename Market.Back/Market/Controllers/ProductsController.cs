@@ -82,5 +82,7 @@ namespace Market.Controllers
                 return StatusCode(500);
             }
         }
+
+       
     }
 }

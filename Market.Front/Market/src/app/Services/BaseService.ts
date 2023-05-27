@@ -42,5 +42,8 @@ export class BaseService{
     public async SendComment(comment:CommentEntity ){
         return await this._dataLoader.SendComment(comment);
     }
+    public async LikeComment(commentId : number){
+        return await this._dataLoader.LikeComment(commentId);
+    }
 
 }

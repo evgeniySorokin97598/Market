@@ -5,38 +5,36 @@ using Npgsql;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
-namespace Market.Repositories.Repositories.PostgresqlRepositories
+using static Market.Repositories.Repositories.PostgresqlRepositories.CategoriesRepository.Columns;
+namespace Market.Repositories.Repositories.PostgresqlRepositories.CategoriesRepository
 {
-    public class CategoriesRepository : ICategoriesRepository
+    public class Repository : BaseRepository, ICategoriesRepository
     {
         private string _tableName = "Categories";
-        string ColumnName = "Name";
-        string UrlIconColumnName = "UrlIcon";
-        string IdColumn = "Id";
-        private NpgsqlConnection _connection;
-        public CategoriesRepository(NpgsqlConnection connection)
+ 
+         
+        public Repository(IDbConnection connection):base(connection) 
         {
-            _connection = connection;
+            
         }
 
 
-        public async Task<int> GetCount() {
+        public async Task<int> GetCount()
+        {
             string sql = $"SELECT COUNT(*) from {_tableName} ";
-
             return (await _connection.QueryAsync<int>(sql)).First();
-
         }
 
         public async Task<long> AddCategoryAsync(CategoryDto category)
         {
             string checkSql = $"SELECT {IdColumn} FROM {_tableName} where {ColumnName} = @name ";
 
-            var checkId = (await _connection.QueryAsync<int>(checkSql, new { name = category.CategoryName }));
+            var checkId = await _connection.QueryAsync<int>(checkSql, new { name = category.CategoryName });
             if (!checkId.Any())
             {
                 /// если ранее небыло такой категории
@@ -49,8 +47,6 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 return result;
             }
             else return checkId.FirstOrDefault();
-
-            
         }
 
         public async Task<IEnumerable<SubCategory>> GetSubCategories(string category)
@@ -68,12 +64,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
         public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync(string category = "")
         {
             string sql = $"select  " +
-                $" subcategory.name as {nameof(SubCategory.SubCategoryName)}, " +
-                $" subcategory.urlicon as {nameof(SubCategory.SubCategoryUrlIcon)}, " +
-                $" categories.urlicon as {nameof(CategoryDto.CategoryIconUrl)}, " +
-                $" categories.name as {nameof(CategoryDto.CategoryName)} " +
-                $"from {SubcategoryRepository.TableName}  " +
-                $"join {_tableName} on {SubcategoryRepository.TableName}.{SubcategoryRepository.CategoryIdColumnName} = {_tableName}.{IdColumn} ";
+                $" {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.NameColumnName} as {nameof(SubCategory.SubCategoryName)}, " +
+                $" {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.UrlIconcColumnName} as {nameof(SubCategory.SubCategoryUrlIcon)}, " +
+                $" {CategoriesRepository.TableCreater.TableName}.{CategoriesRepository.Columns.UrlIconColumnName} as {nameof(CategoryDto.CategoryIconUrl)}, " +
+                $" {CategoriesRepository.TableCreater.TableName}.{CategoriesRepository.Columns.ColumnName} as {nameof(CategoryDto.CategoryName)} " +
+                $"from {SubcategoryRepository.TableCreater.TableName}  " +
+                $"join {_tableName} on {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.CategoryIdColumnName} = {_tableName}.{IdColumn} ";
             if (!string.IsNullOrEmpty(category))
             {
                 sql += $" WHERE {_tableName}.name = @category ";
@@ -81,11 +77,11 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             IEnumerable<dynamic> responce = null;
             if (string.IsNullOrEmpty(category))
             {
-                responce = (await _connection.QueryAsync(sql));
+                responce = await _connection.QueryAsync(sql);
             }
             else
             {
-                responce = (await _connection.QueryAsync(sql, new { category }));
+                responce = await _connection.QueryAsync(sql, new { category });
             }
             var result = new List<CategoryDto>();
             foreach (var t in responce)

@@ -14,6 +14,6 @@ namespace Market.Entities.Dto
         public string Flaws { get; set; }
         public string UserName { get; set; }
         public int Stars { get; set; }
-
+        public int CountLikes { get; set; }
     }
 }

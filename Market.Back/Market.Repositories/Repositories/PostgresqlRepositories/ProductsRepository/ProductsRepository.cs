@@ -2,6 +2,7 @@
 using Market.Entities.Dto;
 using Market.Entities.Requests;
 using Market.Repositories.Interfaces;
+
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,19 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository.Columns;
+using Market.Repositories.Repositories.PostgresqlRepositories;
 
-namespace Market.Repositories.Repositories.PostgresqlRepositories
+namespace Market.Repositories.Repositories.PostgresqlRepositories.ProductsRepository
 {
-    public class ProductsRepository : IProductsRepository
+
+    public class Repository : BaseRepository, IProductsRepository
     {
 
-
+        private string TableName = TableCreater.TableName;
         private NpgsqlConnection _connection;
-        public static string TableName = "products";
-        public static string SubCategoryIdColumn = "SubcategoryId";
-        public static string Id = "id";
-        public static string CommentsForKey = "commmetsId";
 
-        public ProductsRepository(NpgsqlConnection connection)
+        public Repository(NpgsqlConnection connection) : base(connection)
         {
             _connection = connection;
         }
@@ -33,16 +33,18 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
 
 
             string sql = $"select * FROM {TableName} " +
-    $" join typeСharacteristics on products.Сharacteristicid = typeСharacteristics.productid " +
-     " join Сharacteristics on typeСharacteristics.id = Сharacteristics.typeСharacteristicsid " +
-    $" left join {CommentsRepository.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.TableName}.{CommentsRepository.ProductId} " +
-    $" left join {UsersRepository.Table} on {CommentsRepository.TableName}.{CommentsRepository.UserIdCol} = {UsersRepository.Table}.{UsersRepository.IdCol}" + /// join пользователей которые оставляли комментарии
-      $" where {TableName}.{Id} = @id ";
+    $" join {TypeСharacteristicsRepository.TableCreater.TableName} on {TableCreater.TableName}.{СharacteristicId} = {TypeСharacteristicsRepository.TableCreater.TableName}.{TypeСharacteristicsRepository.Columns.ProductId}  " +
+    $" join {СharacteristicsRepository.TableCreater.TableName} on {TypeСharacteristicsRepository.TableCreater.TableName}.{TypeСharacteristicsRepository.Columns.Id}  = {СharacteristicsRepository.TableCreater.TableName}.{СharacteristicsRepository.Columns.TypeСharacteristicsId} " +
+    $" left join {CommentsRepository.TableCreater.TableName} on {TableName}.{nameof(ProductDto.Id)} = {CommentsRepository.TableCreater.TableName}.{CommentsRepository.Columns.ProductId} " +
+    $" left join {UsersRepository.TableCreater.Table} on {CommentsRepository.TableCreater.TableName}.{CommentsRepository.Columns.UserIdCol} = {UsersRepository.TableCreater.Table}.{UsersRepository.Columns.UserId} " + /// join пользователей которые оставляли комментарии
+    $" left join {CommentsLikesRepository.TableCreater.TableName} on {CommentsRepository.TableCreater.TableName}.{CommentsRepository.Columns.Id} = {CommentsLikesRepository.TableCreater.TableName}.{CommentsLikesRepository.Columns.CommentId} " +
+    $" where {TableName}.{Id} = @id ";
 
-            var list = (await _connection.QueryAsync(sql, new
+            var list = await _connection.QueryAsync(sql, new
             {
                 id
-            }));
+            });
+            var cooments = list.DistinctBy(p => p.likeid).Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity) || !string.IsNullOrEmpty(p.flaws));
 
             var first = list.FirstOrDefault();
             if (first == null) return null;
@@ -68,17 +70,19 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                         Text = k.Сharacteristic
                     }).ToList()
                 }).ToList(),
-                Comments = list.Where(p => !string.IsNullOrEmpty(p.comment) || !string.IsNullOrEmpty(p.dignity) || !string.IsNullOrEmpty(p.flaws)).Select(p => new CommentDto()
+                Comments = cooments.DistinctBy(p => p.commentid).Select(p => new CommentDto()
                 {
                     CommentId = p.commentid,
                     Comment = p.comment,
                     Dignity = p.dignity,
                     Flaws = p.flaws,
                     UserName = string.IsNullOrEmpty(p.nickname) ? "Пользователь" : p.nickname,
-                    Stars= p.stars,
+                    Stars = p.stars,
+                    CountLikes = cooments.Where(t => t.commentid == p.commentid).Count()
                 }).ToList()
             };
-            product.Comments = product.Comments.DistinctBy(p => p.CommentId).ToList();
+
+            // product.Comments = product.Comments.DistinctBy(p => p.CommentId).ToList();
             return product;
         }
 
@@ -115,8 +119,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 $"{TableName}.{nameof(ProductDto.Price)}, " +
                 $"{TableName}.{nameof(ProductDto.Id)} " +
                 $" From {TableName} " +
-                $" Join {SubcategoryRepository.TableName} ON {SubcategoryRepository.TableName}.{SubcategoryRepository.IdColumnName} =  {TableName}.{SubCategoryIdColumn}" +
-                $" WHERE {SubcategoryRepository.TableName}.{SubcategoryRepository.NameColumnName} = @Category";
+                $" Join {SubcategoryRepository.TableCreater.TableName} ON {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.IdColumnName} =  {TableName}.{SubCategoryIdColumn}" +
+                $" WHERE {SubcategoryRepository.TableCreater.TableName}.{SubcategoryRepository.Columns.NameColumnName} = @Category";
 
             var result = await _connection.QueryAsync<ProductDto>(sql, new
             {
@@ -124,6 +128,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             });
             return result;
         }
+
+
 
         public async Task AddCharectiristic(ProductCharacteristicType characteristic)
         {
@@ -135,8 +141,8 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
             //// получение айдишника нового типа хараектристики
             long id = (await _connection.QueryAsync<long>(insetTypeChararistic, new
             {
-                Name = characteristic.Name,
-                ProductId = characteristic.ProductId,
+                characteristic.Name,
+                characteristic.ProductId,
             })).FirstOrDefault();
 
             foreach (var t in characteristic.Charastitics)
@@ -145,7 +151,7 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 {
                     Сharacteristic = t.Name,
                     TypeId = id,
-                    Text = t.Text
+                    t.Text
                 });
             }
         }

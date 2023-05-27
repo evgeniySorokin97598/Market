@@ -8,22 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-
-namespace Market.Repositories.Repositories.PostgresqlRepositories
+using static Market.Repositories.Repositories.PostgresqlRepositories.SubcategoryRepository.Columns;
+namespace Market.Repositories.Repositories.PostgresqlRepositories.SubcategoryRepository
 {
-    public class SubcategoryRepository : ISubcategoryRepository
+    public class Repository : BaseRepository, ISubcategoryRepository
     {
 
-        public static string TableName = "subcategory";
-        public static string IdColumnName = "Id";
-        public static string NameColumnName = "Name";
-        public static string UrlIconcColumnName = "UrlIcon";
-        public static string CategoryIdColumnName = "CategoryId";
+        private string TableName = TableCreater.TableName;
 
-        private NpgsqlConnection _connection;
-        public SubcategoryRepository(NpgsqlConnection connection)
+        
+        public Repository(NpgsqlConnection connection):base(connection) 
         {
-            _connection = connection;
+             
         }
         public async Task<int> AddAsync(SubCategory category)
         {
@@ -40,12 +36,12 @@ namespace Market.Repositories.Repositories.PostgresqlRepositories
                 {
                     Name = category.SubCategoryName,
                     UrlIcon = category.SubCategoryUrlIcon,
-                    CategoryId = category.CategoryId
+                    category.CategoryId
                 })).FirstOrDefault();
                 return result;
             }
             else return check.FirstOrDefault();
-            
+
         }
     }
 }

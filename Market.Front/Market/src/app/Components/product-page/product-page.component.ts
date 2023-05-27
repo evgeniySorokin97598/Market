@@ -34,14 +34,16 @@ export class ProductPageComponent implements OnInit {
     this.Product.id = s;
     console.log(this.Product.id);
     this.images.push(this.Product.image);
-    console.log(this.Product);
+   
     this.comment.productId = this.Product.id;
+    console.log(this.comment.productId);
     console.log(this.comment.stars);
+    console.log(this.Product);
   }
 
   async SendComment(){
     this._service.SendComment(this.comment);
-    this.comment = new CommentEntity();
+
   }
 
   /// добавление товара в корзину
@@ -50,7 +52,7 @@ export class ProductPageComponent implements OnInit {
     this.helper.AddProduct(this.Product.id);
   }
   public LikeComment( comment:CommentEntity){
-    
+    this._service.LikeComment(comment.commentId)
   }
   open(content:any) {
     if (this._identetyService.IsAuthorize){

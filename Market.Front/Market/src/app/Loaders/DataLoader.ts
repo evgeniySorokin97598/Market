@@ -68,4 +68,10 @@ export class DataLoader{
         let url:string = this._apiUrl+ 'Comments/Add';
         await this._helper.PostRequest(url,comment)
     }
+    public async LikeComment(commentId:number){
+        await this.Init();
+        console.log("commentId: " + commentId )
+        let url:string = this._apiUrl+ 'Comments/LikeComment?id=' + commentId;
+        await this._helper.PostRequest(url,null);
+    }
 }

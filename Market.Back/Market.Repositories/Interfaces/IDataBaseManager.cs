@@ -12,6 +12,6 @@ namespace Market.Repositories.Interfaces
         public ISubcategoryRepository SubcategoryRepository { get; }
         public IProductsRepository ProductsRepository { get; }
         public ICommentsRepository CommentsRepository { get; }
-
+        public ICommentsLikesRepository  CommentsLikesRepository { get; }
     }
 }
